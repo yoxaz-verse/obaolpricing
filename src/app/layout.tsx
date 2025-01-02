@@ -19,7 +19,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" style={{ backgroundColor: "#f5f5f5" }}>
-      <body className={inter.className} style={{ overflowX: "hidden" }}>
+      <body
+        className={inter.className}
+        style={{ overflowX: "hidden", background: "black" }}
+      >
         {/* <AuthProvider> */}
         <Providers>{children}</Providers>
         {/* </AuthProvider> */}
