@@ -28,7 +28,6 @@ import "@uppy/dashboard/dist/style.css";
 import { baseUrl } from "@/core/api/axiosInstance";
 import { AddModalProps, FormField } from "@/data/interface-data";
 import { toast } from "react-toastify";
-import { showToastMessage } from "@/utils/utils";
 import { postData } from "@/backend/Services/firestore";
 
 const AddModal: React.FC<AddModalProps> = ({
@@ -98,11 +97,6 @@ const AddModal: React.FC<AddModalProps> = ({
       setLoading(false);
     },
     onError: (error: any) => {
-      showToastMessage({
-        type: "error",
-        message: error.response?.data?.message || "An error occurred",
-        position: "top-right",
-      });
       setLoading(false);
     },
   });
@@ -135,19 +129,10 @@ const AddModal: React.FC<AddModalProps> = ({
 
         // Initiate the upload
         const uploadResult = await uppy.upload();
-        showToastMessage({
-          type: "error",
-          message: "File uploaded passing to formData",
-          position: "top-right",
-        });
 
         if (uploadResult?.failed && uploadResult.failed.length > 0) {
           // Handle upload failures
-          showToastMessage({
-            type: "error",
-            message: "File upload failed",
-            position: "top-right",
-          });
+
           setLoading(false);
           return;
         }
@@ -168,11 +153,7 @@ const AddModal: React.FC<AddModalProps> = ({
 
         if (!fileId || !fileURL) {
           // Handle missing fileId or fileURL
-          showToastMessage({
-            type: "error",
-            message: "Failed to retrieve uploaded file details",
-            position: "top-right",
-          });
+
           setLoading(false);
           return;
         }
@@ -202,11 +183,7 @@ const AddModal: React.FC<AddModalProps> = ({
       addItem.mutate(uploadFormData);
     } catch (error: any) {
       console.error("Submission error:", error);
-      showToastMessage({
-        type: "error",
-        message: "An error occurred during submission",
-        position: "top-right",
-      });
+
       setLoading(false);
     }
   };

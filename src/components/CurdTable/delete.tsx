@@ -13,7 +13,6 @@ import {
 import { FiDelete } from "react-icons/fi";
 import { useMutation } from "@tanstack/react-query";
 import { queryClient } from "@/app/provider";
-import { showToastMessage } from "@/utils/utils";
 import { DeleteModalProps } from "@/data/interface-data";
 import { deleteData } from "@/backend/Services/firestore";
 
@@ -34,20 +33,11 @@ export default function DeleteModal({
       queryClient.refetchQueries({
         queryKey,
       });
-      showToastMessage({
-        type: "success",
-        message: `Deleted successfully`,
-        position: "top-right",
-      });
+
       onOpenChange();
       setLoading(false);
     },
     onError: (error: any) => {
-      showToastMessage({
-        type: "error",
-        message: error.response?.data?.message || "An error occurred",
-        position: "top-right",
-      });
       setLoading(false);
     },
   });

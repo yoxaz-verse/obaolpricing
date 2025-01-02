@@ -6,13 +6,10 @@ import { Chip, Spacer } from "@nextui-org/react";
 import AddModal from "@/components/CurdTable/add-model";
 import UserDeleteModal from "@/components/CurdTable/delete";
 import CommonTable from "@/components/CurdTable/common-table";
-import {
-  apiRoutesByRole,
-  generateColumns,
-  initialTableConfig,
-} from "@/utils/tableValues";
+
 import DetailsModal from "@/components/CurdTable/details";
 import EditModal from "@/components/CurdTable/edit-model";
+import { apiRoutesByRole, generateColumns, initialTableConfig } from "@/utlis/tableValues";
 
 const EssentialTabContent = ({
   essentialName,

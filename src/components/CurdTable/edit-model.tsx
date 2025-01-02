@@ -19,7 +19,6 @@ import {
 } from "@nextui-org/react";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { queryClient } from "@/app/provider";
-import { showToastMessage } from "@/utils/utils";
 import { Key } from "react";
 import Uppy from "@uppy/core";
 import XHRUpload from "@uppy/xhr-upload";
@@ -161,20 +160,10 @@ const EditModal: React.FC<EditModalProps> = ({
         queryKey: [currentTable, apiEndpoint],
       });
 
-      showToastMessage({
-        type: "success",
-        message: `${capitalize(currentTable)} Updated Successfully`,
-        position: "top-right",
-      });
       closeModal();
       setLoading(false);
     },
     onError: (error: any) => {
-      showToastMessage({
-        type: "error",
-        message: error.response?.data?.message || "An error occurred",
-        position: "top-right",
-      });
       setLoading(false);
     },
   });
@@ -265,11 +254,7 @@ const EditModal: React.FC<EditModalProps> = ({
       editItem.mutate(completeFormData);
     } catch (error: any) {
       console.error("Submission error:", error);
-      showToastMessage({
-        type: "error",
-        message: "An error occurred during submission",
-        position: "top-right",
-      });
+
       setLoading(false);
     }
   };
