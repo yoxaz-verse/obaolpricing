@@ -8,8 +8,8 @@ import { ToastContainer } from "react-toastify";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Activity Tracker",
-  description: "Activity Tracker",
+  title: "Obaol Cardamom",
+  description: "Obaol Cardamom",
 };
 
 export default function RootLayout({
