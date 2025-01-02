@@ -14,10 +14,6 @@ import { useRouter } from "next/navigation";
 import { useContext, useEffect, useState } from "react";
 
 export default function Home() {
-  const router = useRouter();
-  const [finalDestination, setFinalDestination] = useState<string>("");
-  const [value, setValue] = useState<number>(0);
-
   // const { isAuthenticated } = useContext(AuthContext);
 
   // useEffect(() => {
