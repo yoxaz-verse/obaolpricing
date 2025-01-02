@@ -141,7 +141,7 @@ const UserTabContent: React.FC<UserTabContentProps> = ({ currentTable }) => {
                   )}
                   editModal={(item: any) => (
                     <EditModal
-                      _id={item._id}
+                    item={item._id}
                       initialData={item}
                       currentTable={currentTable}
                       formFields={formFields}
