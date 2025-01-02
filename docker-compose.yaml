@@ -1,0 +1,14 @@
+version: "3.8"
+
+services:
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000" # Map port 3000 on the host to port 3000 in the container
+    environment:
+      NODE_ENV: production # Set the environment to production
+    volumes:
+      - .:/app # Optional, for development to sync files
+      - /app/node_modules # Prevent overwriting node_modules
