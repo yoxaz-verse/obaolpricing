@@ -100,7 +100,7 @@ export interface statusOptions {
 }
 
 export interface EditModalProps {
-  _id: string;
+  item: any;
   currentTable: string;
   formFields: FormField[];
   apiEndpoint: string;

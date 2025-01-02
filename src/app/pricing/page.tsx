@@ -21,7 +21,7 @@ export default function Essentials() {
   };
 
   return (
-    <div className="flex items-center justify-center">
+    <div className="flex items-center justify-center ">
       <div className="w-[95%]">
         <div className="my-4">
           <Title title="Cardamom" />

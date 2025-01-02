@@ -28,7 +28,6 @@ export default function CommonTable({
   ...props
 }: TableProps) {
   type UserData = (typeof TableData)[0];
-  console.log(TableData);
 
   const renderCell = React.useCallback(
     (item: UserData, columnKey: React.Key) => {

@@ -9,7 +9,11 @@ import CommonTable from "@/components/CurdTable/common-table";
 
 import DetailsModal from "@/components/CurdTable/details";
 import EditModal from "@/components/CurdTable/edit-model";
-import { apiRoutesByRole, generateColumns, initialTableConfig } from "@/utlis/tableValues";
+import {
+  apiRoutesByRole,
+  generateColumns,
+  initialTableConfig,
+} from "@/utlis/tableValues";
 
 const EssentialTabContent = ({
   essentialName,
@@ -22,15 +26,10 @@ const EssentialTabContent = ({
 
   // Generate columns
   let columns = generateColumns(essentialName, tableConfig);
-  console.log("Generated columns (raw):", columns);
 
   // Ensure columns is iterable and properly structured
-  console.log("Validated columns:", columns);
   columns = Array.isArray(columns) ? columns : Object.values(columns);
-  console.log("Validated columns:", columns);
   columns = columns.filter((column: any) => column && column.uid); // Ensure no invalid columns
-
-  console.log("Validated columns:", columns);
 
   // Filter out 'action' column if showActions is false
   const newColumns = showActions
@@ -100,13 +99,15 @@ const EssentialTabContent = ({
                     columns={newColumns} // Use the filtered array of columns
                     isLoading={false}
                     editModal={(item: any) => (
-                      <EditModal
-                        _id={item.id}
-                        currentTable={essentialName}
-                        formFields={formFields}
-                        apiEndpoint={apiRoutesByRole[essentialName]} // Assuming API endpoint for update
-                        refetchData={refetchData}
-                      />
+                      <div>
+                        <EditModal
+                          item={item}
+                          currentTable={essentialName}
+                          formFields={formFields}
+                          apiEndpoint={apiRoutesByRole[essentialName]} // Assuming API endpoint for update
+                          refetchData={refetchData}
+                        />
+                      </div>
                     )}
                     deleteModal={(item: any) => (
                       <UserDeleteModal

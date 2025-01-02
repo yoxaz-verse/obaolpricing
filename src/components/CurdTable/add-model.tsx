@@ -466,7 +466,7 @@ const AddModal: React.FC<AddModalProps> = ({
     <>
       <div className="flex justify-end">
         <button
-          className="w-[120px] bg-[#3EADEB] rounded-3xl text-white h-[45px] text-sm"
+          className="w-[120px] bg-warning rounded-3xl text-white h-[45px] text-sm"
           onClick={openModal}
         >
           Add
