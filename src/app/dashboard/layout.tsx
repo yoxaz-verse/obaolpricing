@@ -1,7 +1,6 @@
 "use client";
 
 import { useContext } from "react";
-import AuthContext from "@/context/AuthContext"; // Adjust the import path as necessary
 import Sidebar from "@/components/dashboard/Sidebar";
 import TopBar from "@/components/dashboard/TopBar";
 import Template from "../template";
@@ -39,8 +38,6 @@ export default function DashboardLayout({
 
   const allowedRoles = getAllowedRoles(pathname); // Dynamically determine allowed roles
 
-  const { user } = useContext(AuthContext);
-
   return (
     <section className="w-full h-full flex">
       {/* <PrivateRoute allowedRoles={allowedRoles}> */}
@@ -50,12 +47,7 @@ export default function DashboardLayout({
       <div className="w-full xl:w-5/6 lg:h-screen ">
         <div>
           {/* Check if user data is available before rendering TopBar */}
-          {user && (
-            <TopBar
-              username={user.email} // Assuming user.email exists
-              role={user.role} // Assuming user.role is a string
-            />
-          )}
+
           <Spacer y={2} />
           <div className="max-h-[90vh] w-full overflow-y-auto">
             {/* Optionally, handle role-specific loading or error */}

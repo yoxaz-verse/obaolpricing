@@ -1,7 +1,7 @@
 "use client";
 import EssentialTabContent from "@/components/dashboard/Essentials/essential-tab-content";
 import Title from "@/components/titles";
-import AuthContext from "@/context/AuthContext";
+// import AuthContext from "@/context/AuthContext";
 import {
   Card,
   CardBody,
@@ -18,7 +18,7 @@ export default function Home() {
   const [finalDestination, setFinalDestination] = useState<string>("");
   const [value, setValue] = useState<number>(0);
 
-  const { isAuthenticated } = useContext(AuthContext);
+  // const { isAuthenticated } = useContext(AuthContext);
 
   // useEffect(() => {
   //   // Since AuthContext checks auth status on mount, we need to wait for it

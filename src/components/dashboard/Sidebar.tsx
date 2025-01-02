@@ -12,14 +12,14 @@ import {
 import { MdDashboard } from "react-icons/md";
 import { RiBuildingLine } from "react-icons/ri";
 import { useRouter, usePathname } from "next/navigation";
-import AuthContext from "@/context/AuthContext";
+// import AuthContext from "@/context/AuthContext";
 import { routeRoles } from "@/utils/roleHelpers";
 import { sidebarOptions } from "@/utils/utils";
 
 const Sidebar = () => {
   const router = useRouter();
   const pathname = usePathname();
-  const { user } = useContext(AuthContext); // Get current user from context
+  // const { user } = useContext(AuthContext); // Get current user from context
   const [selectedOption, setSelectedOption] = useState<string>("dashboard");
 
 
@@ -40,7 +40,7 @@ const Sidebar = () => {
   // Filter sidebar options based on user role and route roles
   const filteredOptions = sidebarOptions.filter((option) => {
     const allowedRoles = routeRoles[option.link] || [];
-    return user?.role ? allowedRoles.includes(user.role) : false;
+    // return user?.role ? allowedRoles.includes(user.role) : false;
   });
 
   const handleOptionClick = (optionLink: string, optionName: string) => {

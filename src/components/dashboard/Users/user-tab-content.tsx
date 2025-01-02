@@ -5,7 +5,6 @@ import QueryComponent from "@/components/queryComponent";
 import AddModal from "@/components/CurdTable/add-model";
 import CommonTable from "../../CurdTable/common-table";
 import { useQuery } from "@tanstack/react-query"; // Import useQuery
-import { getData } from "@/core/api/apiHandler"; // Import getData function
 import { Spacer } from "@nextui-org/react";
 import DeleteModal from "@/components/CurdTable/delete";
 import DetailsModal from "@/components/CurdTable/details";
@@ -15,6 +14,7 @@ import {
   generateColumns,
   initialTableConfig,
 } from "@/utils/tableValues";
+import { getData } from "@/backend/Services/firestore";
 
 interface UserTabContentProps {
   currentTable: string;
@@ -41,7 +41,7 @@ const UserTabContent: React.FC<UserTabContentProps> = ({ currentTable }) => {
   });
 
   // Extract admin data
-  const adminData = adminResponse?.data.data.data || [];
+  const adminData = adminResponse?.data || [];
 
   // Fetch admin data when currentTable is 'serviceCompany'
   const { data: serviceCompanyResponse } = useQuery({
@@ -51,7 +51,7 @@ const UserTabContent: React.FC<UserTabContentProps> = ({ currentTable }) => {
   });
 
   // Extract serviceCompany data
-  const serviceCompanyData = serviceCompanyResponse?.data.data.data || [];
+  const serviceCompanyData = serviceCompanyResponse?.data || [];
 
   return (
     <>
