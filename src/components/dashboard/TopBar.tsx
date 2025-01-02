@@ -13,12 +13,10 @@ import { CiMenuBurger } from "react-icons/ci";
 
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import AuthContext from "@/context/AuthContext";
 import { routeRoles } from "@/utils/roleHelpers";
 import { sidebarOptions } from "@/utils/utils";
 
 const TopBar = ({ username, role }: TopbarProps) => {
-  const { logout } = useContext(AuthContext);
   const router = useRouter();
 
   // Filter options based on the user's role
@@ -104,7 +102,7 @@ const TopBar = ({ username, role }: TopbarProps) => {
               color="danger"
               onClick={async () => {
                 try {
-                  await logout(); // Call logout from AuthContext
+                  // await logout(); // Call logout from AuthContext
                   router.push("/auth");
                 } catch (err) {
                   console.error("Logout failed:", err);
