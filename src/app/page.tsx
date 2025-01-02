@@ -33,15 +33,13 @@ export default function Home() {
   //   checkAuthentication();
   // }, [isAuthenticated, router]);
   return (
-    <div className="bg-[#000000] h-screen p-5">
-      <Image
-        src={"/cardamom (1).png"}
-        width={2000}
-        height={2000}
-        alt=""
-        className=""
-      />
-      {"w-[100vw] h-[100vh]"}
+    <div className="bg-[#000000] h-screen p-5 overflow-hidden">
+      <div
+        className="
+            w-[100vw] h-[100vh] absolute opacity-15 flex items-center justify-center"
+      >
+        <Image src={"/cardamom (1).png"} width={2000} height={2000} alt="" />
+      </div>
       <div className="flex  items-center">
         <Image
           src={"/cardamom (3).png"}
