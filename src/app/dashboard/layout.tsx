@@ -37,9 +37,7 @@ export default function DashboardLayout({
   return (
     <section className="w-full h-full flex">
       {/* <PrivateRoute allowedRoles={allowedRoles}> */}
-      <div className="w-1/6 h-screen hidden xl:block">
-        <Sidebar />
-      </div>
+      <div className="w-1/6 h-screen hidden xl:block">{/* <Sidebar /> */}</div>
       <div className="w-full xl:w-5/6 lg:h-screen ">
         <div>
           {/* Check if user data is available before rendering TopBar */}
