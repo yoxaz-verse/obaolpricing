@@ -4,7 +4,6 @@ import Template from "../template";
 // import PrivateRoute from "@/components/Login/private-route";
 import { usePathname } from "next/navigation";
 import { Spacer } from "@nextui-org/react";
-import { getAllowedRoles } from "@/utils/roleHelpers";
 
 // export const routeRoles: { [key: string]: string[] } = {
 //   "/dashboard": [
@@ -31,8 +30,6 @@ export default function DashboardLayout({
   children: React.ReactNode;
 }) {
   const pathname = usePathname(); // Gets the current URL pathname
-
-  const allowedRoles = getAllowedRoles(pathname); // Dynamically determine allowed roles
 
   return (
     <section className="w-full h-full flex">

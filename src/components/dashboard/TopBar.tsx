@@ -13,22 +13,20 @@ import { CiMenuBurger } from "react-icons/ci";
 
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { routeRoles } from "@/utils/roleHelpers";
-import { sidebarOptions } from "@/utils/utils";
 
 const TopBar = ({ username, role }: TopbarProps) => {
   const router = useRouter();
 
   // Filter options based on the user's role
-  const filteredOptions = sidebarOptions.filter((option) => {
-    const allowedRoles = routeRoles[option.link] || [];
-    return allowedRoles.includes(role);
-  });
+  // const filteredOptions = sidebarOptions.filter((option) => {
+  //   const allowedRoles = routeRoles[option.link] || [];
+  //   return allowedRoles.includes(role);
+  // });
 
   return (
     <div className="flex justify-between p-5 bg-gray-100 shadow-md">
       {/* Menu for small screens */}
-      <Dropdown className="items-center justify-center h-full flex xl:hidden">
+      {/* <Dropdown className="items-center justify-center h-full flex xl:hidden">
         <DropdownTrigger>
           <div className="w-6 h-6 flex items-center justify-center xl:hidden">
             <CiMenuBurger size={24} />
@@ -38,8 +36,7 @@ const TopBar = ({ username, role }: TopbarProps) => {
           aria-label="Sidebar Options"
           disallowEmptySelection
           selectionMode="single"
-        >
-          {filteredOptions.map((option) => (
+        > {filteredOptions.map((option) => (
             <DropdownItem key={option.name}>
               <Link href={option.link}>
                 <div className="flex items-center gap-2">
@@ -50,7 +47,7 @@ const TopBar = ({ username, role }: TopbarProps) => {
             </DropdownItem>
           ))}
         </DropdownMenu>
-      </Dropdown>
+      </Dropdown> */}
 
       {/* Title Section */}
       <div className="hidden md:block">

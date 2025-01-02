@@ -9,12 +9,12 @@ import { Spacer } from "@nextui-org/react";
 import DeleteModal from "@/components/CurdTable/delete";
 import DetailsModal from "@/components/CurdTable/details";
 import EditModal from "@/components/CurdTable/edit-model";
+import { getData } from "@/backend/Services/firestore";
 import {
+  initialTableConfig,
   apiRoutesByRole,
   generateColumns,
-  initialTableConfig,
-} from "@/utils/tableValues";
-import { getData } from "@/backend/Services/firestore";
+} from "@/utlis/tableValues";
 
 interface UserTabContentProps {
   currentTable: string;

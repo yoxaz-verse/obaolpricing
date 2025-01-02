@@ -3,7 +3,6 @@
 "use client";
 
 import React, { useContext, useEffect, useState } from "react";
-import { showToastMessage, useEmailValidation } from "../../utils/utils";
 import {
   Autocomplete,
   AutocompleteItem,
@@ -20,19 +19,24 @@ const LoginComponent = () => {
   const [isVisible, setIsVisible] = useState(false);
   const [email, setEmail] = useState("");
   const [rememberMe, setRememberMe] = useState(false);
-  const isInvalidEmail = useEmailValidation(email);
   const toggleVisibility = () => setIsVisible(!isVisible);
   const [isLoading, setIsLoading] = useState(false);
 
-  const roles = ["ActivityManager","ProjectManager", "Admin", "Customer", "Worker"];
+  const roles = [
+    "ActivityManager",
+    "ProjectManager",
+    "Admin",
+    "Customer",
+    "Worker",
+  ];
   const [role, setRole] = useState("Admin");
   const router = useRouter();
   // const { isAuthenticated, loading, login } = useContext(AuthContext);
 
   // useEffect(() => {
-    // if (!loading && isAuthenticated) {
-      // router.push("/dashboard"); // Redirect authenticated users away from login page
-    // }
+  // if (!loading && isAuthenticated) {
+  // router.push("/dashboard"); // Redirect authenticated users away from login page
+  // }
   // }, [isAuthenticated, loading, router]);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -53,27 +57,13 @@ const LoginComponent = () => {
             JSON.stringify(new Date().getTime() + 10 * 24 * 60 * 60 * 1000)
           );
         }
-        showToastMessage({
-          type: "success",
-          message: "Login Successful",
-          position: "top-right",
-        });
+
         // Redirection handled by useEffect after isAuthenticated updates
       } catch (error: any) {
         setIsLoading(false);
-        showToastMessage({
-          type: "error",
-          message: error.response?.data?.message || "Login failed",
-          position: "top-right",
-        });
       }
     } else {
       setIsLoading(false);
-      showToastMessage({
-        type: "error",
-        message: "Email and password are required",
-        position: "top-right",
-      });
     }
   };
 
@@ -105,9 +95,7 @@ const LoginComponent = () => {
             value={email}
             type="text"
             variant="underlined"
-            isInvalid={!isInvalidEmail}
             isRequired={true}
-            color={!isInvalidEmail ? "danger" : "success"}
             placeholder="Email"
             onValueChange={setEmail}
           />
