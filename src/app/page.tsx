@@ -2,16 +2,7 @@
 import EssentialTabContent from "@/components/dashboard/Essentials/essential-tab-content";
 import Title from "@/components/titles";
 // import AuthContext from "@/context/AuthContext";
-import {
-  Card,
-  CardBody,
-  CardFooter,
-  Chip,
-  CircularProgress,
-} from "@nextui-org/react";
 import Image from "next/image";
-import { useRouter } from "next/navigation";
-import { useContext, useEffect, useState } from "react";
 
 export default function Home() {
   // const { isAuthenticated } = useContext(AuthContext);
