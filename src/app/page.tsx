@@ -33,7 +33,7 @@ export default function Home() {
           className="   max-w-[90vw] max-h-[90vh] object-contain"
         />
       </div>
-      <div className="flex  items-center">
+      <div className="md:flex  items-center">
         <Image
           src={"/cardamom (3).png"}
           width={200}
