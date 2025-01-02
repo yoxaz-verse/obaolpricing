@@ -4,7 +4,7 @@ import { useContext } from "react";
 import Sidebar from "@/components/dashboard/Sidebar";
 import TopBar from "@/components/dashboard/TopBar";
 import Template from "../template";
-import PrivateRoute from "@/components/Login/private-route";
+// import PrivateRoute from "@/components/Login/private-route";
 import { usePathname } from "next/navigation";
 import { Spacer } from "@nextui-org/react";
 import { getAllowedRoles } from "@/utils/roleHelpers";

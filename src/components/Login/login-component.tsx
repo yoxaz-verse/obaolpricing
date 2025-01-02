@@ -14,7 +14,7 @@ import {
 } from "@nextui-org/react";
 import { IoEye, IoEyeOff } from "react-icons/io5";
 import { useRouter } from "next/navigation";
-import AuthContext from "@/context/AuthContext";
+// import AuthContext from "@/context/AuthContext";
 
 const LoginComponent = () => {
   const [isVisible, setIsVisible] = useState(false);
@@ -27,13 +27,13 @@ const LoginComponent = () => {
   const roles = ["ActivityManager","ProjectManager", "Admin", "Customer", "Worker"];
   const [role, setRole] = useState("Admin");
   const router = useRouter();
-  const { isAuthenticated, loading, login } = useContext(AuthContext);
+  // const { isAuthenticated, loading, login } = useContext(AuthContext);
 
-  useEffect(() => {
-    if (!loading && isAuthenticated) {
-      router.push("/dashboard"); // Redirect authenticated users away from login page
-    }
-  }, [isAuthenticated, loading, router]);
+  // useEffect(() => {
+    // if (!loading && isAuthenticated) {
+      // router.push("/dashboard"); // Redirect authenticated users away from login page
+    // }
+  // }, [isAuthenticated, loading, router]);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -45,7 +45,7 @@ const LoginComponent = () => {
     };
     if (email && e.currentTarget.password.value) {
       try {
-        await login(data);
+        // await login(data);
         if (rememberMe) {
           // Set remember me functionality if needed
           localStorage.setItem(
@@ -77,14 +77,14 @@ const LoginComponent = () => {
     }
   };
 
-  if (loading) {
-    // Show a loading indicator
-    return (
-      <div className="flex h-screen justify-center items-center">
-        <p>Loading...</p>
-      </div>
-    );
-  }
+  // if (loading) {
+  //   // Show a loading indicator
+  //   return (
+  //     <div className="flex h-screen justify-center items-center">
+  //       <p>Loading...</p>
+  //     </div>
+  //   );
+  // }
 
   return (
     <>
