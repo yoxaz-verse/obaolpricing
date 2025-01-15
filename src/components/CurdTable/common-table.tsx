@@ -161,7 +161,6 @@ export default function CommonTable({
       isStriped
       color={"secondary"}
       aria-label="Table with custom actions"
-      selectionMode="single"
       bottomContent={
         <div className="flex w-full justify-center">
           {/* <Pagination
