@@ -1,13 +1,23 @@
 export default function Title({ title }: { title: string }) {
   return (
-    <h1 className="font-bold text-[56px] md:text-[72px] text-green-800">
+    <h1 className="font-semibold text-[42px] md:text-[52px] text-success-700">
       {title}
     </h1>
   );
 }
 
 export function SubTitle({ title }: { title: string }) {
+  const words = title.split(" ");
   return (
-    <h1 className=" text-[15px] md:text-[35px] text-secondary-300">{title}</h1>
+    <h1 className="text-[15px] md:text-[35px]">
+      {words.map((word, index) => (
+        <span
+          key={index}
+          className={index % 2 === 0 ? "text-warning-500" : "text-black"}
+        >
+          {word}{" "}
+        </span>
+      ))}
+    </h1>
   );
 }

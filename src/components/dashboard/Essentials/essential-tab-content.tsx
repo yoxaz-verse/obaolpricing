@@ -2,10 +2,11 @@
 import React from "react";
 
 import QueryComponent from "@/components/queryComponent";
-import { Chip, Spacer } from "@nextui-org/react";
+import { Chip, Divider, Spacer } from "@nextui-org/react";
 import AddModal from "@/components/CurdTable/add-model";
 import UserDeleteModal from "@/components/CurdTable/delete";
 import CommonTable from "@/components/CurdTable/common-table";
+import { motion } from "framer-motion";
 
 import DetailsModal from "@/components/CurdTable/details";
 import EditModal from "@/components/CurdTable/edit-model";
@@ -14,6 +15,7 @@ import {
   generateColumns,
   initialTableConfig,
 } from "@/utlis/tableValues";
+import { SubTitle } from "@/components/titles";
 
 const EssentialTabContent = ({
   essentialName,
@@ -45,12 +47,24 @@ const EssentialTabContent = ({
   return (
     <div className="flex items-center justify-center">
       <div className="w-[95%]">
-        <div className="my-4">
+        <motion.div
+          initial={{ x: 20, opacity: 0 }}
+          animate={{ x: 0, opacity: 1 }}
+          // exit={{ y: -50, opacity: 0 }}
+          transition={{ duration: 1, ease: "easeInOut", delay: 1 }}
+        >
+          <SubTitle title="Obaol Supreme" />
+        </motion.div>{" "}
+        <div className="">
+          <h2 className="font-bold  text-[24px]">Updated </h2> <Spacer y={2} />
           <Chip color="primary" className={"text-blue-700"} variant="dot">
-            Updated Before
+            Before
+          </Chip>{" "}
+          <Chip color="warning" className={"text-yellow-700"} variant="dot">
+            Yesterday
           </Chip>{" "}
           <Chip color="success" className={"text-green-700"} variant="dot">
-            Updated Today
+            Today
           </Chip>{" "}
           {showActions && (
             <AddModal
@@ -60,11 +74,12 @@ const EssentialTabContent = ({
               refetchData={refetchData}
             />
           )}
+          <Divider className="my-2" />
           <QueryComponent
             api={apiRoutesByRole[essentialName]}
             queryKey={[essentialName, apiRoutesByRole[essentialName]]}
             page={1}
-            limit={100}
+            limit={1000}
           >
             {(data: any) => {
               const fetchedData = data || [];

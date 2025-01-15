@@ -21,10 +21,10 @@ function QueryComponent<T>(props: QueryComponentProps<T>) {
 
   // Dynamically construct parameters, excluding undefined or null values
   const params = {
-    ...(page !== undefined && { page }),
-    ...(limit !== undefined && { limit }),
-    ...(search && { search }),
-    ...(additionalParams || {}), // Include additional dynamic params
+    // ...(page !== undefined && { page }),
+    // ...(limit !== undefined && { limit }),
+    // ...(search && { search }),
+    // ...(additionalParams || {}), // Include additional dynamic params
   };
   console.log(api);
 
