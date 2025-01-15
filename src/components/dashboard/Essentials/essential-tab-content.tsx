@@ -54,7 +54,7 @@ const EssentialTabContent = ({
     <div className="flex items-center justify-center">
       <div className="w-[95%]">
         <div className="">
-          {associate && (
+          {associate ? (
             <QueryComponent
               api={apiRoutesByRole["associates"]}
               queryKey={["associates", apiRoutesByRole["associates"]]}
@@ -84,6 +84,8 @@ const EssentialTabContent = ({
                 );
               }}
             </QueryComponent>
+          ) : (
+            <SubTitle title="Obaol Supreme" />
           )}
           <div>
             <h2 className="font-bold  text-[24px]">Updated </h2>{" "}
