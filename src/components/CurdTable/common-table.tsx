@@ -191,21 +191,38 @@ export default function CommonTable({
         {(item: any) => (
           <TableRow key={item._id}>
             {(columnKey) => {
-              // Convert the `updatedAt` timestamp to a JavaScript Date object
-              const isToday = (() => {
+              // Function to determine the date category
+              const getDateCategory = () => {
                 if (item.updatedAt?.seconds) {
-                  const updatedDate = new Date(
-                    item.updatedAt.seconds * 1000
-                  ).toDateString(); // Convert seconds to milliseconds
-                  const today = new Date().toDateString(); // Get today's date
-                  return updatedDate === today; // Compare dates
+                  const updatedDate = new Date(item.updatedAt.seconds * 1000); // Convert seconds to milliseconds
+                  const today = new Date();
+                  const yesterday = new Date();
+                  yesterday.setDate(today.getDate() - 1);
+
+                  const updatedDateString = updatedDate.toDateString();
+                  const todayString = today.toDateString();
+                  const yesterdayString = yesterday.toDateString();
+
+                  if (updatedDateString === todayString) return "today";
+                  if (updatedDateString === yesterdayString) return "yesterday";
+                  return "before";
                 }
-                return false; // Default to false if updatedAt is invalid
-              })();
+                return "unknown"; // Default if updatedAt is invalid
+              };
+
+              const dateCategory = getDateCategory();
 
               return (
                 <TableCell
-                  className={isToday ? "text-green-700" : "text-blue-700"}
+                  className={
+                    dateCategory === "today"
+                      ? "text-green-700"
+                      : dateCategory === "yesterday"
+                      ? "text-yellow-700"
+                      : dateCategory === "before"
+                      ? "text-blue-700"
+                      : "text-gray-700"
+                  }
                 >
                   {renderCell(item, columnKey)}
                 </TableCell>
