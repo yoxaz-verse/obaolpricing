@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useState } from "react";
 
 import QueryComponent from "@/components/queryComponent";
 import { Chip, Divider, Spacer } from "@nextui-org/react";
@@ -16,16 +16,22 @@ import {
   initialTableConfig,
 } from "@/utlis/tableValues";
 import { SubTitle } from "@/components/titles";
+import { getData } from "@/backend/Services/firestore";
+import { useQuery } from "@tanstack/react-query";
+import { query } from "firebase/firestore";
 
 const EssentialTabContent = ({
   essentialName,
   showActions,
+  associate,
 }: {
+  associate?: string;
   essentialName: string;
   showActions: boolean;
 }) => {
   const tableConfig = { ...initialTableConfig }; // Create a copy to avoid mutations
-
+  const queryKey = "associates";
+  const [Commission, setCommission] = useState(30);
   // Generate columns
   let columns = generateColumns(essentialName, tableConfig);
 
@@ -47,25 +53,52 @@ const EssentialTabContent = ({
   return (
     <div className="flex items-center justify-center">
       <div className="w-[95%]">
-        <motion.div
-          initial={{ x: 20, opacity: 0 }}
-          animate={{ x: 0, opacity: 1 }}
-          // exit={{ y: -50, opacity: 0 }}
-          transition={{ duration: 1, ease: "easeInOut", delay: 1 }}
-        >
-          <SubTitle title="Obaol Supreme" />
-        </motion.div>{" "}
         <div className="">
-          <h2 className="font-bold  text-[24px]">Updated </h2> <Spacer y={2} />
-          <Chip color="primary" className={"text-blue-700"} variant="dot">
-            Before
-          </Chip>{" "}
-          <Chip color="warning" className={"text-yellow-700"} variant="dot">
-            Yesterday
-          </Chip>{" "}
-          <Chip color="success" className={"text-green-700"} variant="dot">
-            Today
-          </Chip>{" "}
+          {associate && (
+            <QueryComponent
+              api={apiRoutesByRole["associates"]}
+              queryKey={["associates", apiRoutesByRole["associates"]]}
+              page={1}
+              limit={1000}
+            >
+              {(data: any) => {
+                const fetchedData = data || [];
+                const filteredData = fetchedData.filter(
+                  (item: any) => item.url === associate
+                );
+
+                setCommission(filteredData[0].commission);
+                console.log(Commission);
+
+                return (
+                  <>
+                    <motion.div
+                      initial={{ x: 20, opacity: 0 }}
+                      animate={{ x: 0, opacity: 1 }}
+                      // exit={{ y: -50, opacity: 0 }}
+                      transition={{ duration: 1, ease: "easeInOut", delay: 1 }}
+                    >
+                      <SubTitle title={filteredData[0].name} />
+                    </motion.div>{" "}
+                  </>
+                );
+              }}
+            </QueryComponent>
+          )}
+          <div>
+            <h2 className="font-bold  text-[24px]">Updated </h2>{" "}
+            <Spacer y={2} />
+            <Chip color="primary" className={"text-blue-700"} variant="dot">
+              Before
+            </Chip>{" "}
+            <Chip color="warning" className={"text-yellow-700"} variant="dot">
+              Yesterday
+            </Chip>{" "}
+            <Chip color="success" className={"text-green-700"} variant="dot">
+              Today
+            </Chip>{" "}
+          </div>{" "}
+          <Divider className="my-2" />
           {showActions && (
             <AddModal
               currentTable={essentialName}
@@ -73,8 +106,7 @@ const EssentialTabContent = ({
               apiEndpoint={apiRoutesByRole[essentialName]}
               refetchData={refetchData}
             />
-          )}
-          <Divider className="my-2" />
+          )}{" "}
           <QueryComponent
             api={apiRoutesByRole[essentialName]}
             queryKey={[essentialName, apiRoutesByRole[essentialName]]}
@@ -83,12 +115,48 @@ const EssentialTabContent = ({
           >
             {(data: any) => {
               const fetchedData = data || [];
-
               const formFields = tableConfig[essentialName];
+              console.log(fetchedData);
 
-              const tableData = fetchedData.map((item: any) => {
+              // Adjust prices by adding commission
+              const adjustedData = fetchedData.map((item: any) => {
+                const { normal, export: exportPrice, ...rest } = item;
+
+                // Adjust prices if 'normal' and 'export' exist
+                const adjustedNormal =
+                  normal > 0 ? Number(normal) + Number(Commission) : normal;
+                const adjustedExport =
+                  exportPrice > 0
+                    ? Number(exportPrice) + Number(Commission)
+                    : exportPrice;
+
+                if (essentialName === "location") {
+                  return {
+                    ...rest,
+                    normal: adjustedNormal,
+                    export: adjustedExport,
+                    locationType: item.locationType
+                      ? item.locationType.name
+                      : "N/A",
+                    locationManager: item.locationManager
+                      ? item.locationManager.map(
+                          (loc: { code: string; name: string }) => loc
+                        )
+                      : "N/A",
+                  };
+                }
+
+                return {
+                  ...rest,
+                  normal: adjustedNormal,
+                  export: adjustedExport,
+                };
+              });
+
+              const tableData = adjustedData.map((item: any) => {
                 const { isDeleted, isActive, password, __v, ...rest } = item;
 
+                // Add additional logic for any special case like location
                 if (essentialName === "location") {
                   return {
                     ...rest,
