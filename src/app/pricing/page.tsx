@@ -24,7 +24,9 @@ export default function Essentials() {
     <div className="flex items-center justify-center ">
       <div className="w-[95%]">
         <div className="my-4">
-          <Title title="Cardamom" />
+          <div className="md:flex   items-center ml-[2.5%]">
+            <Title title="Cardamom " />
+          </div>{" "}
           {/* <Tabs
             aria-label="Cardamom Tabs"
             selectedKey={locationTab}

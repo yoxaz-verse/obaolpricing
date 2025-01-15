@@ -35,16 +35,16 @@ export default function Home() {
           className="   max-w-[90vw] max-h-[90vh] object-contain"
         />
       </div>
-      <div className="md:flex   items-center ml-[2.5%]">
-        <motion.div
-          initial={{ y: 20, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          // exit={{ y: -50, opacity: 0 }}
-          transition={{ duration: 1, ease: "easeInOut", delay: .5 }}
-        >
+      <motion.div
+        initial={{ y: 20, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        // exit={{ y: -50, opacity: 0 }}
+        transition={{ duration: 1, ease: "easeInOut", delay: 0.5 }}
+      >
+        <div className="md:flex   items-center ml-[2.5%]">
           <Title title="Cardamom Live Pricing" />
-        </motion.div>
-      </div>{" "}
+        </div>{" "}
+      </motion.div>
       <Spacer y={6} />
       <EssentialTabContent essentialName="cardamom" showActions={false} />
     </div>
