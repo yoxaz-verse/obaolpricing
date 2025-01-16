@@ -2,7 +2,7 @@
 import React, { useState } from "react";
 
 import QueryComponent from "@/components/queryComponent";
-import { Chip, Divider, Spacer } from "@nextui-org/react";
+import { Button, Chip, Divider, Spacer } from "@nextui-org/react";
 import AddModal from "@/components/CurdTable/add-model";
 import UserDeleteModal from "@/components/CurdTable/delete";
 import CommonTable from "@/components/CurdTable/common-table";
@@ -19,6 +19,8 @@ import { SubTitle } from "@/components/titles";
 import { getData } from "@/backend/Services/firestore";
 import { useQuery } from "@tanstack/react-query";
 import { query } from "firebase/firestore";
+import Link from "next/link";
+import { RiWhatsappFill } from "react-icons/ri";
 
 const EssentialTabContent = ({
   essentialName,
@@ -80,12 +82,35 @@ const EssentialTabContent = ({
                     >
                       <SubTitle title={filteredData[0].name} />
                     </motion.div>{" "}
+                    <Spacer y={2} />
+                    <Link
+                      target="_blank"
+                      href={`http://wa.me/${filteredData[0].number}`}
+                    >
+                      <Button color="success" variant="ghost" size="sm">
+                        Contact Us Via <RiWhatsappFill />
+                      </Button>{" "}
+                    </Link>
+                    <Spacer y={4} />
                   </>
                 );
               }}
             </QueryComponent>
           ) : (
-            <SubTitle title="Obaol Supreme" />
+            <>
+              <SubTitle title="Obaol Supreme" />
+              <Spacer y={2} />
+              <Link
+                href={`http://wa.me/917306096941`}
+                target="_blank"
+                className="z-10"
+              >
+                <Button color="success" variant="ghost" size="sm">
+                  Contact Us Via <RiWhatsappFill />
+                </Button>
+              </Link>{" "}
+              <Spacer y={4} />
+            </>
           )}
           <div>
             <h2 className="font-bold  text-[24px]">Updated </h2>{" "}
