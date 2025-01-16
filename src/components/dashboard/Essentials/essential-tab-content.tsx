@@ -31,7 +31,7 @@ const EssentialTabContent = ({
 }) => {
   const tableConfig = { ...initialTableConfig }; // Create a copy to avoid mutations
   const queryKey = "associates";
-  const [Commission, setCommission] = useState(30);
+  const [Commission, setCommission] = useState(50);
   // Generate columns
   let columns = generateColumns(essentialName, tableConfig);
 
@@ -132,46 +132,15 @@ const EssentialTabContent = ({
                     ? Number(exportPrice) + Number(Commission)
                     : exportPrice;
 
-                if (essentialName === "location") {
-                  return {
-                    ...rest,
-                    normal: adjustedNormal,
-                    export: adjustedExport,
-                    locationType: item.locationType
-                      ? item.locationType.name
-                      : "N/A",
-                    locationManager: item.locationManager
-                      ? item.locationManager.map(
-                          (loc: { code: string; name: string }) => loc
-                        )
-                      : "N/A",
-                  };
-                }
-
                 return {
                   ...rest,
-                  normal: adjustedNormal,
-                  export: adjustedExport,
+                  normal: showActions ? normal : adjustedNormal,
+                  export: showActions ? exportPrice : adjustedExport,
                 };
               });
 
               const tableData = adjustedData.map((item: any) => {
                 const { isDeleted, isActive, password, __v, ...rest } = item;
-
-                // Add additional logic for any special case like location
-                if (essentialName === "location") {
-                  return {
-                    ...rest,
-                    locationType: item.locationType
-                      ? item.locationType.name
-                      : "N/A",
-                    locationManager: item.locationManager
-                      ? item.locationManager.map(
-                          (loc: { code: string; name: string }) => loc
-                        )
-                      : "N/A",
-                  };
-                }
 
                 return rest;
               });
