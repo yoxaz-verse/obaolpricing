@@ -101,7 +101,7 @@ const EssentialTabContent = ({
               <SubTitle title="Obaol Supreme" />
               <Spacer y={2} />
               <Link
-                href={`http://wa.me/917306096941`}
+                href={`http://wa.me/+917338177496`}
                 target="_blank"
                 className="z-10"
               >
