@@ -21,3 +21,16 @@ export function SubTitle({ title }: { title: string }) {
     </h1>
   );
 }
+
+export function SubTitleSecond({ title }: { title: string }) {
+  const words = title.split(" ");
+  return (
+    <h1 className="text-[6px] md:text-[14px]">
+      {words.map((word, index) => (
+        <span key={index} className={"text-black"}>
+          {word}{" "}
+        </span>
+      ))}
+    </h1>
+  );
+}

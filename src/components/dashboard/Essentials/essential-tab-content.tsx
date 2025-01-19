@@ -15,7 +15,7 @@ import {
   generateColumns,
   initialTableConfig,
 } from "@/utlis/tableValues";
-import { SubTitle } from "@/components/titles";
+import { SubTitle, SubTitleSecond } from "@/components/titles";
 import { getData } from "@/backend/Services/firestore";
 import { useQuery } from "@tanstack/react-query";
 import { query } from "firebase/firestore";
@@ -143,7 +143,6 @@ const EssentialTabContent = ({
             {(data: any) => {
               const fetchedData = data || [];
               const formFields = tableConfig[essentialName];
-              console.log(fetchedData);
 
               // Adjust prices by adding commission
               const adjustedData = fetchedData.map((item: any) => {
@@ -172,6 +171,8 @@ const EssentialTabContent = ({
 
               return (
                 <>
+                  <SubTitleSecond title="Excluding GST" />
+
                   <Spacer y={5} />
                   <CommonTable
                     TableData={tableData}
