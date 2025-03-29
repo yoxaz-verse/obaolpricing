@@ -8,8 +8,8 @@ import { ToastContainer } from "react-toastify";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Obaol Cardamom",
-  description: "Obaol Cardamom",
+  title: "Cardamom Live Rate",
+  description: "Only panel which provides market rate of cardamom and purchase on that rate.",
 };
 
 export default function RootLayout({
