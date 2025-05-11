@@ -9,7 +9,8 @@ const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "Cardamom Live Rate",
-  description: "Only panel which provides market rate of cardamom and purchase on that rate.",
+  description:
+    "Only panel which provides market rate of cardamom and purchase on that rate.",
 };
 
 export default function RootLayout({
@@ -19,7 +20,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" style={{}}>
-      <body className={inter.className} style={{ overflowX: "hidden" }}>
+      <body
+        className={inter.className}
+        style={{ overflowX: "hidden", background: "black" }}
+      >
         {/* <AuthProvider> */}
         <Providers>{children}</Providers>
         {/* </AuthProvider> */}

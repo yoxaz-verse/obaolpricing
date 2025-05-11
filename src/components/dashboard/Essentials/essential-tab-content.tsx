@@ -70,7 +70,7 @@ const EssentialTabContent = ({
                 );
 
                 setCommission(filteredData[0].commission);
-                console.log(Commission);
+                console.log(filteredData[0]);
 
                 return (
                   <>
@@ -80,7 +80,7 @@ const EssentialTabContent = ({
                       // exit={{ y: -50, opacity: 0 }}
                       transition={{ duration: 1, ease: "easeInOut", delay: 1 }}
                     >
-                      <SubTitle title={filteredData[0].companyName} />
+                      <SubTitle title={filteredData[0].company} />
                     </motion.div>{" "}
                     <Spacer y={2} />
                     <Link
@@ -206,7 +206,14 @@ const EssentialTabContent = ({
         </div>
       </div>
       <Spacer y={5} />
-      <div className="w-[95%] font-extralight">
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        // exit={{ y: -50, opacity: 0 }}
+
+        transition={{ duration: 2, delay: 1, ease: "easeInOut" }}
+        className="w-[95%] font-extralight"
+      >
         {" "}
         Welcome to our real-time cardamom auction rate panel, your trusted
         source for the latest market prices. This platform provides
@@ -228,7 +235,7 @@ const EssentialTabContent = ({
         <Spacer y={5} />
         Empower your trading decisions with accurate and timely market insights,
         all consolidated in one reliable source.
-      </div>
+      </motion.div>
       <Spacer y={10} />
     </div>
   );
