@@ -53,7 +53,7 @@ const EssentialTabContent = ({
   };
 
   return (
-    <div className="flex items-center justify-center">
+    <div className="flex flex-col items-center justify-center">
       <div className="w-[95%]">
         <div className="">
           {associate ? (
@@ -205,6 +205,31 @@ const EssentialTabContent = ({
           </QueryComponent>
         </div>
       </div>
+      <Spacer y={5} />
+      <div className="w-[95%] font-extralight">
+        {" "}
+        Welcome to our real-time cardamom auction rate panel, your trusted
+        source for the latest market prices. This platform provides
+        up-to-the-minute data from authorized auction centers, ensuring
+        transparency and accuracy in the cardamom trade.
+        <Spacer y={5} />
+        <b> Key Highlights:</b> <Spacer y={1} />
+        <ul>
+          <li>
+            <b> Real-Time Updates: </b>Stay informed with the latest auction
+            prices as they happen.
+          </li>
+
+          <li>
+            <b> Authorized Sources:</b> All data is sourced from licensed
+            auctioneers, adhering to Spices Board regulations.
+          </li>
+        </ul>
+        <Spacer y={5} />
+        Empower your trading decisions with accurate and timely market insights,
+        all consolidated in one reliable source.
+      </div>
+      <Spacer y={10} />
     </div>
   );
 };

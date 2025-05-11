@@ -1,6 +1,6 @@
 export default function Title({ title }: { title: string }) {
   return (
-    <h1 className="font-semibold text-[42px] md:text-[52px] text-success-500">
+    <h1 className="font-semibold text-[42px] md:text-[52px] text-lime-300">
       {title}
     </h1>
   );
