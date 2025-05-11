@@ -24,7 +24,7 @@ export default function Home() {
   //   checkAuthentication();
   // }, [isAuthenticated, router]);
   return (
-    <div className="min-h-screen bg-slate-900 text-white">
+    <div className=" text-white">
       <div
         className="
              absolute top-16 lg:top-0 right-0 flex items-center justify-center"
