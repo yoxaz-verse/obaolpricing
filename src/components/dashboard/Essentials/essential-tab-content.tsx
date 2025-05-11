@@ -229,7 +229,7 @@ const EssentialTabContent = ({
 
           <li>
             <b> Authorized Sources:</b> All data is sourced from licensed
-            auctioneers, adhering to Spices Board regulations.
+            auctioneers, adhering to Indian Spices Board regulations.
           </li>
         </ul>
         <Spacer y={5} />
