@@ -11,6 +11,11 @@ export const metadata: Metadata = {
   title: "Cardamom Live Rate",
   description:
     "Only panel which provides market rate of cardamom and purchase on that rate.",
+  icons: {
+    icon: "/favicon.ico",
+    apple: "/apple-touch-icon.png",
+    shortcut: "/favicon.ico",
+  },
 };
 
 export default function RootLayout({
