@@ -24,7 +24,7 @@ export default function Home() {
   //   checkAuthentication();
   // }, [isAuthenticated, router]);
   return (
-    <div className="h-screen overflow-hidden">
+    <div className="h-screen ">
       <div
         className="
             w-[100vw] h-[100vh] absolute opacity-15 flex items-center justify-center"

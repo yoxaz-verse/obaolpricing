@@ -22,13 +22,13 @@ export default function Home() {
   //   checkAuthentication();
   // }, [isAuthenticated, router]);
   return (
-    <div className="h-screen overflow-hidden">
+    <div className="min-h-screen bg-slate-900 text-white">
       <div
         className="
-            w-[100vw] h-[100vh] absolute opacity-15 flex items-center justify-center"
+            w-[100vw] h-[100vh] absolute  flex items-center justify-center"
       >
         <Image
-          src={"/cardamom (3).png"}
+          src={"/cardamom (2).webp"}
           width={2000}
           height={2000}
           alt=""

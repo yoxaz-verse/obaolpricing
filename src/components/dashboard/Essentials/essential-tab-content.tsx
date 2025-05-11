@@ -80,7 +80,7 @@ const EssentialTabContent = ({
                       // exit={{ y: -50, opacity: 0 }}
                       transition={{ duration: 1, ease: "easeInOut", delay: 1 }}
                     >
-                      <SubTitle title={filteredData[0].name} />
+                      <SubTitle title={filteredData[0].companyName} />
                     </motion.div>{" "}
                     <Spacer y={2} />
                     <Link
@@ -88,7 +88,7 @@ const EssentialTabContent = ({
                       href={`http://wa.me/${filteredData[0].number}`}
                     >
                       <Button color="success" variant="ghost" size="sm">
-                        Contact Us Via <RiWhatsappFill />
+                        Contact {filteredData[0].name} Via <RiWhatsappFill />
                       </Button>{" "}
                     </Link>
                     <Spacer y={4} />
@@ -106,26 +106,27 @@ const EssentialTabContent = ({
                 className="z-10"
               >
                 <Button color="success" variant="ghost" size="sm">
-                  Contact Us Via <RiWhatsappFill />
+                  Contact Team Via <RiWhatsappFill />
                 </Button>
               </Link>{" "}
+              <Spacer y={1} />
               <Spacer y={4} />
             </>
           )}
           <div>
             <h2 className="font-bold  text-[24px]">Updated </h2>{" "}
             <Spacer y={2} />
-            <Chip color="primary" className={"text-blue-700"} variant="dot">
+            <Chip color="primary" className={"text-blue-400"} variant="dot">
               Before
             </Chip>{" "}
-            <Chip color="warning" className={"text-yellow-700"} variant="dot">
+            <Chip color="warning" className={"text-yellow-400"} variant="dot">
               Yesterday
             </Chip>{" "}
-            <Chip color="success" className={"text-green-700"} variant="dot">
+            <Chip color="success" className={"text-green-400"} variant="dot">
               Today
             </Chip>{" "}
           </div>{" "}
-          <Divider className="my-2" />
+          <Divider className="my-2 text-white bg-white" />
           {showActions && (
             <AddModal
               currentTable={essentialName}
