@@ -13,7 +13,7 @@ export function SubTitle({ title }: { title: string }) {
       {words?.map((word, index) => (
         <span
           key={index}
-          className={index % 2 === 0 ? "text-red-800" : "text-red-700"}
+          className={index % 2 === 0 ? "text-white" : "text-white"}
         >
           {word}{" "}
         </span>
