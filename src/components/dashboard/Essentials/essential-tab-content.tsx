@@ -98,7 +98,7 @@ const EssentialTabContent = ({
             </QueryComponent>
           ) : (
             <>
-              <SubTitle title="Obaol Supreme" />
+              <SubTitle title="GAIN - Global Agro Industry Network" />
               <Spacer y={2} />
               <Link
                 href={`http://wa.me/+917338177496`}
@@ -172,7 +172,7 @@ const EssentialTabContent = ({
 
               return (
                 <>
-                  <SubTitleSecond title="Excluding GST" />
+                  <SubTitleSecond title="Excluding GST and the Prices are in INR" />
 
                   <Spacer y={5} />
                   <CommonTable

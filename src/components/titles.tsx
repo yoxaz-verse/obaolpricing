@@ -13,7 +13,7 @@ export function SubTitle({ title }: { title: string }) {
       {words?.map((word, index) => (
         <span
           key={index}
-          className={index % 2 === 0 ? "text-warning-500" : "text-white"}
+          className={index % 2 === 0 ? "text-red-800" : "text-red-700"}
         >
           {word}{" "}
         </span>
@@ -25,9 +25,9 @@ export function SubTitle({ title }: { title: string }) {
 export function SubTitleSecond({ title }: { title: string }) {
   const words = title.split(" ");
   return (
-    <h1 className="text-[6px] md:text-[14px]">
+    <h1 className="text-[9px] md:text-[18px]">
       {words.map((word, index) => (
-        <span key={index} className={"text-black"}>
+        <span key={index} className={"text-green-400 font-semibold"}>
           {word}{" "}
         </span>
       ))}

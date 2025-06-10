@@ -24,9 +24,9 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" style={{}}>
+    <html lang="en" className="bg-slate-900" style={{}}>
       <body
-        className={`${inter.className} bg-slate-900`}
+        className={`${inter.className} `}
         style={{ overflowX: "hidden" }}
       >
         {/* <AuthProvider> */}
