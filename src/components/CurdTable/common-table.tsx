@@ -143,7 +143,7 @@ export default function CommonTable({
 
   // Pagination logic
   const [page, setPage] = React.useState(1);
-  const rowsPerPage = 10;
+  const rowsPerPage = 100;
   const pages = Math.ceil((TableData?.length || 0) / rowsPerPage);
 
   const items = React.useMemo(() => {
