@@ -101,7 +101,7 @@ const EssentialTabContent = ({
               <SubTitle title="GAIN - Global Agro Industry Network" />
               <Spacer y={2} />
               <Link
-                href={`http://wa.me/+917338177496`}
+                href={`http://wa.me/+919019351483`}
                 target="_blank"
                 className="z-10"
               >
