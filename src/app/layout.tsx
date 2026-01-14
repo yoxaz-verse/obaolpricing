@@ -8,9 +8,9 @@ import { ToastContainer } from "react-toastify";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Cardamom Live Rate",
+  title: "Commodity Pricing Platform - Real-Time Market Rates",
   description:
-    "Only panel which provides market rate of cardamom and purchase on that rate.",
+    "Real-time pricing platform for premium spices including cardamom, pepper, cinnamon, nutmeg, mace, honey, and tea. Live updates from authorized auction centers with accurate market insights.",
   icons: {
     icon: "/favicon.ico",
     apple: "/apple-touch-icon.png",
@@ -24,7 +24,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="bg-red-950" style={{}}>
+    <html lang="en" className="bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 text-white" style={{}}>
       <body className={`${inter.className} `} style={{ overflowX: "hidden" }}>
         {/* <AuthProvider> */}
         <Providers>{children}</Providers>

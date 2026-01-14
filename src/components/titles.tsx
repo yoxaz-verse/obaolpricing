@@ -27,7 +27,7 @@ export function SubTitleSecond({ title }: { title: string }) {
   return (
     <h1 className="text-[9px] md:text-[18px]">
       {words.map((word, index) => (
-        <span key={index} className={"text-green-400 font-semibold"}>
+        <span key={index} className={"text-green-700 font-semibold"}>
           {word}{" "}
         </span>
       ))}

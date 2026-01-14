@@ -9,20 +9,19 @@ import Link from "next/link";
 
 export default function OSPricing() {
   const spices = [
-    { key: "cardamom", name: "Cardamom", commission: 50, isPrimary: true },
-    { key: "pepper", name: "Pepper", commission: 50 },
-    { key: "cinnamon", name: "Cinnamon", commission: 50 },
-    { key: "nutmeg", name: "Nutmeg", commission: 50 },
-    { key: "mace", name: "Mace", commission: 50 },
-    { key: "honey", name: "Honey", commission: 50 },
-    { key: "tea", name: "Tea", commission: 50 },
+    { key: "cardamom", name: "Cardamom", commission: 0, isPrimary: true },
+    { key: "pepper", name: "Pepper", commission: 0 },
+    { key: "cinnamon", name: "Cinnamon", commission: 0 },
+    { key: "nutmeg", name: "Nutmeg", commission: 0 },
+    { key: "mace", name: "Mace", commission: 0 },
+    { key: "honey", name: "Honey", commission: 0 },
+    { key: "tea", name: "Tea", commission: 0 },
   ];
 
   // Company information
-  const companyName = "Caster - Obaol";
+  const companyName = "Caster Spices";
   const contactNumber = "+91 88480 22403";
   const whatsappNumber = "918848022403"; // WhatsApp number without + and spaces
-
   return (
     <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900">
       <div className="w-[95%] max-w-7xl">
@@ -125,8 +124,8 @@ export default function OSPricing() {
                 <CardBody className="p-6 md:p-8">
                   <EssentialTabContent
                     essentialName={spice.key}
-                    showActions={true}
-                    commission={0}
+                    showActions={false}
+                    commission={spice.commission}
                     spiceName={spice.name}
                     isPrimary={spice.isPrimary || false}
                   />

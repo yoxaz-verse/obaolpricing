@@ -33,34 +33,7 @@ export const generateColumns = (currentTable: string, tableConfig: any) => {
       type: field.type,
     }));
 
-  if (currentTable === "worker") {
-    nonActionColumns.push({ name: "SERVICE COMPANY", uid: "serviceCompany" });
-  } else if (currentTable === "location") {
-    nonActionColumns.push({ name: "LOCATION TYPE", uid: "type" });
-  } else if (currentTable === "projects") {
-    // nonActionColumns.push({ name: "Admin Name", uid: "adminName" });
-    nonActionColumns.push({
-      name: "Project Manager",
-      uid: "projectManagerName",
-    });
-    nonActionColumns.push({ name: "Customer", uid: "customerName" });
-    nonActionColumns.push({ name: "ProjectStatus", uid: "projectStatus" });
-    nonActionColumns.push({ name: "Project Type", uid: "projectType" });
-    nonActionColumns.push({ name: "Location", uid: "location" });
-  } else if (currentTable === "activity") {
-    // nonActionColumns.push({ name: "Admin Name", uid: "adminName" });
-    nonActionColumns.push({
-      name: "Activity Manager",
-      uid: "activityManagerName",
-    });
-    nonActionColumns.push({ name: "Activity Status", uid: "activityStatus" });
-    nonActionColumns.push({ name: "Activity Type", uid: "activityType" });
-  } else if (
-    currentTable === "projectManager" ||
-    currentTable === "activityManager"
-  ) {
-    nonActionColumns.push({ name: "ADMIN", uid: "admin" });
-  }
+
 
   // Find the "Actions" column separately
   const actionsColumn = tableConfig[currentTable].find(
@@ -98,7 +71,17 @@ export const apiRoutesByRole: Record<string, string> = {
   timeSheet: timeSheetRoutes.getAll,
   activityFile: activityFileRoutes.getAll,
   cardamom: "cardamom",
+  pepper: "pepper",
+  nutmeg: "nutmeg",
+  mace: "mace",
+  Cinnamon: "cinnamon",
+  honey: "honey",
+  tea: "tea",
   associates: "associates",
+
+
+
+
 };
 
 export const initialTableConfig: Record<
@@ -106,22 +89,22 @@ export const initialTableConfig: Record<
   {
     label: string;
     type:
-      | "text"
-      | "select"
-      | "multiselect"
-      | "multiselectValue"
-      | "file"
-      | "textarea"
-      | "boolean"
-      | "image"
-      | "action"
-      | "email"
-      | "date"
-      | "number"
-      | "time"
-      | "link"
-      | "dateTime"
-      | "password"; // Define specific types
+    | "text"
+    | "select"
+    | "multiselect"
+    | "multiselectValue"
+    | "file"
+    | "textarea"
+    | "boolean"
+    | "image"
+    | "action"
+    | "email"
+    | "date"
+    | "number"
+    | "time"
+    | "link"
+    | "dateTime"
+    | "password"; // Define specific types
     key: string;
     inForm: boolean;
     inTable: boolean;
@@ -173,6 +156,156 @@ export const initialTableConfig: Record<
     //   inForm: false,
     //   inTable: true,
     // },
+    {
+      label: "Actions",
+      type: "action",
+      key: "actions2",
+      inForm: false,
+      inTable: true,
+    },
+  ],
+  pepper: [
+    {
+      label: "Quality",
+      type: "text",
+      key: "quality",
+      inForm: true,
+      inTable: true,
+      inEdit: true,
+    },
+    {
+      label: "Price",
+      type: "number",
+      key: "price",
+      inForm: true,
+      inTable: true,
+      inEdit: true,
+    },
+    {
+      label: "Actions",
+      type: "action",
+      key: "actions2",
+      inForm: false,
+      inTable: true,
+    },
+  ],
+  nutmeg: [
+    {
+      label: "Quality",
+      type: "text",
+      key: "quality",
+      inForm: true,
+      inTable: true,
+      inEdit: true,
+    },
+    {
+      label: "Price",
+      type: "number",
+      key: "price",
+      inForm: true,
+      inTable: true,
+      inEdit: true,
+    },
+    {
+      label: "Actions",
+      type: "action",
+      key: "actions2",
+      inForm: false,
+      inTable: true,
+    },
+  ],
+  mace: [
+    {
+      label: "Quality",
+      type: "text",
+      key: "quality",
+      inForm: true,
+      inTable: true,
+      inEdit: true,
+    },
+    {
+      label: "Price",
+      type: "number",
+      key: "price",
+      inForm: true,
+      inTable: true,
+      inEdit: true,
+    },
+    {
+      label: "Actions",
+      type: "action",
+      key: "actions2",
+      inForm: false,
+      inTable: true,
+    },
+  ],
+  cinnamon: [
+    {
+      label: "Quality",
+      type: "text",
+      key: "quality",
+      inForm: true,
+      inTable: true,
+      inEdit: true,
+    },
+    {
+      label: "Price",
+      type: "number",
+      key: "price",
+      inForm: true,
+      inTable: true,
+      inEdit: true,
+    },
+    {
+      label: "Actions",
+      type: "action",
+      key: "actions2",
+      inForm: false,
+      inTable: true,
+    },
+  ],
+  honey: [
+    {
+      label: "Quality",
+      type: "text",
+      key: "quality",
+      inForm: true,
+      inTable: true,
+      inEdit: true,
+    },
+    {
+      label: "Price",
+      type: "number",
+      key: "price",
+      inForm: true,
+      inTable: true,
+      inEdit: true,
+    },
+    {
+      label: "Actions",
+      type: "action",
+      key: "actions2",
+      inForm: false,
+      inTable: true,
+    },
+  ],
+  tea: [
+    {
+      label: "Quality",
+      type: "text",
+      key: "quality",
+      inForm: true,
+      inTable: true,
+      inEdit: true,
+    },
+    {
+      label: "Price",
+      type: "number",
+      key: "price",
+      inForm: true,
+      inTable: true,
+      inEdit: true,
+    },
     {
       label: "Actions",
       type: "action",

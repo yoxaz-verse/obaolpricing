@@ -1,39 +1,33 @@
 "use client";
-import React, { useState } from "react";
+import React from "react";
 
 import QueryComponent from "@/components/queryComponent";
-import { Button, Chip, Divider, Spacer } from "@nextui-org/react";
+import { Spacer } from "@nextui-org/react";
 import AddModal from "@/components/CurdTable/add-model";
 import UserDeleteModal from "@/components/CurdTable/delete";
 import CommonTable from "@/components/CurdTable/common-table";
-import { motion } from "framer-motion";
 
-import DetailsModal from "@/components/CurdTable/details";
 import EditModal from "@/components/CurdTable/edit-model";
 import {
   apiRoutesByRole,
   generateColumns,
   initialTableConfig,
 } from "@/utlis/tableValues";
-import { SubTitle, SubTitleSecond } from "@/components/titles";
-import { getData } from "@/backend/Services/firestore";
-import { useQuery } from "@tanstack/react-query";
-import { query } from "firebase/firestore";
-import Link from "next/link";
-import { RiWhatsappFill } from "react-icons/ri";
 
 const EssentialTabContent = ({
   essentialName,
   showActions,
-  associate,
+  commission = 0,
+  spiceName,
+  isPrimary = false,
 }: {
-  associate?: string;
   essentialName: string;
   showActions: boolean;
+  commission?: number;
+  spiceName?: string;
+  isPrimary?: boolean;
 }) => {
   const tableConfig = { ...initialTableConfig }; // Create a copy to avoid mutations
-  const queryKey = "associates";
-  const [Commission, setCommission] = useState(50);
   // Generate columns
   let columns = generateColumns(essentialName, tableConfig);
 
@@ -46,87 +40,30 @@ const EssentialTabContent = ({
     ? columns
     : columns.filter((column: any) => column.type !== "action");
 
-  console.log("Final columns (post-filter):", newColumns);
-
   const refetchData = () => {
     // Implement refetch logic if necessary
   };
 
   return (
     <div className="flex flex-col items-center justify-center">
-      <div className="w-[95%]">
-        <div className="">
-          {associate ? (
-            <QueryComponent
-              api={apiRoutesByRole["associates"]}
-              queryKey={["associates", apiRoutesByRole["associates"]]}
-              page={1}
-              limit={1000}
-            >
-              {(data: any) => {
-                const fetchedData = data || [];
-                const filteredData = fetchedData.filter(
-                  (item: any) => item.url === associate
-                );
-
-                setCommission(filteredData[0].commission);
-                console.log(filteredData[0]);
-
-                return (
-                  <>
-                    <motion.div
-                      initial={{ x: 20, opacity: 0 }}
-                      animate={{ x: 0, opacity: 1 }}
-                      // exit={{ y: -50, opacity: 0 }}
-                      transition={{ duration: 1, ease: "easeInOut", delay: 1 }}
-                    >
-                      <SubTitle title={filteredData[0].company} />
-                    </motion.div>{" "}
-                    <Spacer y={2} />
-                    <Link
-                      target="_blank"
-                      href={`http://wa.me/${filteredData[0].number}`}
-                    >
-                      <Button color="success" variant="ghost" size="sm">
-                        Contact {filteredData[0].name} Via <RiWhatsappFill />
-                      </Button>{" "}
-                    </Link>
-                    <Spacer y={4} />
-                  </>
-                );
-              }}
-            </QueryComponent>
-          ) : (
-            <>
-              <SubTitle title="GAIN - Global Agro Industry Network" />
-              <Spacer y={2} />
-              <Link
-                href={`http://wa.me/+919019351483`}
-                target="_blank"
-                className="z-10"
+      <div className="w-full">
+        <div className="space-y-4">
+          {/* Spice Name Title and GST Info */}
+          {spiceName && (
+            <div className="space-y-2 mb-4">
+              <h2
+                className={`text-2xl md:text-3xl font-bold capitalize ${
+                  isPrimary ? "text-lime-600" : "text-white"
+                }`}
               >
-                <Button color="success" variant="ghost" size="sm">
-                  Contact Team Via <RiWhatsappFill />
-                </Button>
-              </Link>{" "}
-              <Spacer y={1} />
-              <Spacer y={4} />
-            </>
+                {spiceName}
+              </h2>
+              <p className="text-sm md:text-base text-gray-400">
+                Excluding GST and the Prices are in INR
+              </p>
+            </div>
           )}
-          <div>
-            <h2 className="font-bold  text-[24px]">Updated </h2>{" "}
-            <Spacer y={2} />
-            <Chip color="primary" className={"text-blue-400"} variant="dot">
-              Before
-            </Chip>{" "}
-            <Chip color="warning" className={"text-yellow-400"} variant="dot">
-              Yesterday
-            </Chip>{" "}
-            <Chip color="success" className={"text-green-400"} variant="dot">
-              Today
-            </Chip>{" "}
-          </div>{" "}
-          <Divider className="my-2 text-white bg-white" />
+
           {showActions && (
             <AddModal
               currentTable={essentialName}
@@ -134,7 +71,8 @@ const EssentialTabContent = ({
               apiEndpoint={apiRoutesByRole[essentialName]}
               refetchData={refetchData}
             />
-          )}{" "}
+          )}
+
           <QueryComponent
             api={apiRoutesByRole[essentialName]}
             queryKey={[essentialName, apiRoutesByRole[essentialName]]}
@@ -145,22 +83,30 @@ const EssentialTabContent = ({
               const fetchedData = data || [];
               const formFields = tableConfig[essentialName];
 
-              // Adjust prices by adding commission
+              // Adjust prices by adding commission when commission is provided
+              const shouldApplyCommission = commission > 0;
               const adjustedData = fetchedData.map((item: any) => {
-                const { normal, export: exportPrice, ...rest } = item;
+                const { normal, export: exportPrice, price, ...rest } = item;
 
-                // Adjust prices if 'normal' and 'export' exist
+                // Adjust prices if commission is provided and prices exist
                 const adjustedNormal =
-                  normal > 0 ? Number(normal) + Number(Commission) : normal;
+                  shouldApplyCommission && normal > 0
+                    ? Number(normal) + Number(commission)
+                    : normal;
                 const adjustedExport =
-                  exportPrice > 0
-                    ? Number(exportPrice) + Number(Commission)
+                  shouldApplyCommission && exportPrice > 0
+                    ? Number(exportPrice) + Number(commission)
                     : exportPrice;
+                const adjustedPrice =
+                  shouldApplyCommission && price > 0
+                    ? Number(price) + Number(commission)
+                    : price;
 
                 return {
                   ...rest,
-                  normal: showActions ? normal : adjustedNormal,
-                  export: showActions ? exportPrice : adjustedExport,
+                  normal: adjustedNormal,
+                  export: adjustedExport,
+                  price: adjustedPrice,
                 };
               });
 
@@ -171,72 +117,35 @@ const EssentialTabContent = ({
               });
 
               return (
-                <>
-                  <SubTitleSecond title="Excluding GST and the Prices are in INR" />
-
-                  <Spacer y={5} />
-                  <CommonTable
-                    TableData={tableData}
-                    columns={newColumns} // Use the filtered array of columns
-                    isLoading={false}
-                    editModal={(item: any) => (
-                      <div>
-                        <EditModal
-                          item={item}
-                          currentTable={essentialName}
-                          formFields={formFields}
-                          apiEndpoint={apiRoutesByRole[essentialName]} // Assuming API endpoint for update
-                          refetchData={refetchData}
-                        />
-                      </div>
-                    )}
-                    deleteModal={(item: any) => (
-                      <UserDeleteModal
-                        _id={item.id}
-                        name={item.name}
-                        deleteApiEndpoint={apiRoutesByRole[essentialName]}
+                <CommonTable
+                  TableData={tableData}
+                  columns={newColumns}
+                  isLoading={false}
+                  editModal={(item: any) => (
+                    <div>
+                      <EditModal
+                        item={item}
+                        currentTable={essentialName}
+                        formFields={formFields}
+                        apiEndpoint={apiRoutesByRole[essentialName]}
                         refetchData={refetchData}
                       />
-                    )}
-                  />
-                </>
+                    </div>
+                  )}
+                  deleteModal={(item: any) => (
+                    <UserDeleteModal
+                      _id={item.id}
+                      name={item.name}
+                      deleteApiEndpoint={apiRoutesByRole[essentialName]}
+                      refetchData={refetchData}
+                    />
+                  )}
+                />
               );
             }}
           </QueryComponent>
         </div>
       </div>
-      <Spacer y={5} />
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        // exit={{ y: -50, opacity: 0 }}
-
-        transition={{ duration: 2, delay: 1, ease: "easeInOut" }}
-        className="w-[95%] font-extralight"
-      >
-        {" "}
-        Welcome to our real-time cardamom auction rate panel, your trusted
-        source for the latest market prices. This platform provides
-        up-to-the-minute data from authorized auction centers, ensuring
-        transparency and accuracy in the cardamom trade.
-        <Spacer y={5} />
-        <b> Key Highlights:</b> <Spacer y={1} />
-        <ul>
-          <li>
-            <b> Real-Time Updates: </b>Stay informed with the latest auction
-            prices as they happen.
-          </li>
-
-          <li>
-            <b> Authorized Sources:</b> All data is sourced from licensed
-            auctioneers, adhering to Indian Spices Board regulations.
-          </li>
-        </ul>
-        <Spacer y={5} />
-        Empower your trading decisions with accurate and timely market insights,
-        all consolidated in one reliable source.
-      </motion.div>
-      <Spacer y={10} />
     </div>
   );
 };
