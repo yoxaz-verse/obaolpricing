@@ -45,78 +45,84 @@ const EssentialTabContent = ({
   };
 
   return (
-    <div className="flex flex-col items-center justify-center">
-      <div className="w-full">
-        <div className="space-y-4">
-          {/* Spice Name Title and GST Info */}
-          {spiceName && (
-            <div className="space-y-2 mb-4">
-              <h2
-                className={`text-2xl md:text-3xl font-bold capitalize ${
-                  isPrimary ? "text-lime-600" : "text-white"
-                }`}
-              >
-                {spiceName}
-              </h2>
-              <p className="text-sm md:text-base text-gray-400">
-                Excluding GST and the Prices are in INR
-              </p>
-            </div>
-          )}
+    <QueryComponent
+      api={apiRoutesByRole[essentialName]}
+      queryKey={[essentialName, apiRoutesByRole[essentialName]]}
+      page={1}
+      limit={1000}
+    >
+      {(data: any) => {
+        const fetchedData = data || [];
+        
+        // Hide entire component if product is empty and showActions is false
+        if (fetchedData.length === 0 && !showActions) {
+          return null;
+        }
+        
+        const formFields = tableConfig[essentialName];
 
-          {showActions && (
-            <AddModal
-              currentTable={essentialName}
-              formFields={tableConfig[essentialName]}
-              apiEndpoint={apiRoutesByRole[essentialName]}
-              refetchData={refetchData}
-            />
-          )}
+        // Adjust prices by adding commission when commission is provided
+        const shouldApplyCommission = commission > 0;
+        const adjustedData = fetchedData.map((item: any) => {
+          const { normal, export: exportPrice, price, ...rest } = item;
 
-          <QueryComponent
-            api={apiRoutesByRole[essentialName]}
-            queryKey={[essentialName, apiRoutesByRole[essentialName]]}
-            page={1}
-            limit={1000}
-          >
-            {(data: any) => {
-              const fetchedData = data || [];
-              const formFields = tableConfig[essentialName];
+          // Adjust prices if commission is provided and prices exist
+          const adjustedNormal =
+            shouldApplyCommission && normal > 0
+              ? Number(normal) + Number(commission)
+              : normal;
+          const adjustedExport =
+            shouldApplyCommission && exportPrice > 0
+              ? Number(exportPrice) + Number(commission)
+              : exportPrice;
+          const adjustedPrice =
+            shouldApplyCommission && price > 0
+              ? Number(price) + Number(commission)
+              : price;
 
-              // Adjust prices by adding commission when commission is provided
-              const shouldApplyCommission = commission > 0;
-              const adjustedData = fetchedData.map((item: any) => {
-                const { normal, export: exportPrice, price, ...rest } = item;
+          return {
+            ...rest,
+            normal: adjustedNormal,
+            export: adjustedExport,
+            price: adjustedPrice,
+          };
+        });
 
-                // Adjust prices if commission is provided and prices exist
-                const adjustedNormal =
-                  shouldApplyCommission && normal > 0
-                    ? Number(normal) + Number(commission)
-                    : normal;
-                const adjustedExport =
-                  shouldApplyCommission && exportPrice > 0
-                    ? Number(exportPrice) + Number(commission)
-                    : exportPrice;
-                const adjustedPrice =
-                  shouldApplyCommission && price > 0
-                    ? Number(price) + Number(commission)
-                    : price;
+        const tableData = adjustedData.map((item: any) => {
+          const { isDeleted, isActive, password, __v, ...rest } = item;
 
-                return {
-                  ...rest,
-                  normal: adjustedNormal,
-                  export: adjustedExport,
-                  price: adjustedPrice,
-                };
-              });
+          return rest;
+        });
 
-              const tableData = adjustedData.map((item: any) => {
-                const { isDeleted, isActive, password, __v, ...rest } = item;
+        return (
+          <div className="flex flex-col items-center justify-center">
+            <div className="w-full">
+              <div className="space-y-4">
+                {/* Spice Name Title and GST Info */}
+                {spiceName && (
+                  <div className="space-y-2 mb-4">
+                    <h2
+                      className={`text-2xl md:text-3xl font-bold capitalize ${
+                        isPrimary ? "text-lime-600" : "text-white"
+                      }`}
+                    >
+                      {spiceName}
+                    </h2>
+                    <p className="text-sm md:text-base text-gray-400">
+                      Excluding GST and the Prices are in INR
+                    </p>
+                  </div>
+                )}
 
-                return rest;
-              });
+                {showActions && (
+                  <AddModal
+                    currentTable={essentialName}
+                    formFields={formFields}
+                    apiEndpoint={apiRoutesByRole[essentialName]}
+                    refetchData={refetchData}
+                  />
+                )}
 
-              return (
                 <CommonTable
                   TableData={tableData}
                   columns={newColumns}
@@ -141,12 +147,12 @@ const EssentialTabContent = ({
                     />
                   )}
                 />
-              );
-            }}
-          </QueryComponent>
-        </div>
-      </div>
-    </div>
+              </div>
+            </div>
+          </div>
+        );
+      }}
+    </QueryComponent>
   );
 };
 
