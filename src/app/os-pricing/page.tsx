@@ -6,6 +6,8 @@ import Title from "@/components/titles";
 import EssentialTabContent from "@/components/dashboard/Essentials/essential-tab-content";
 import { motion } from "framer-motion";
 import Link from "next/link";
+import QueryComponent from "@/components/queryComponent";
+import { apiRoutesByRole } from "@/utlis/tableValues";
 
 export default function OSPricing() {
   const spices = [
@@ -22,6 +24,88 @@ export default function OSPricing() {
   const companyName = "Caster - Obaol";
   const contactNumber = "+91 88480 22403";
   const whatsappNumber = "918848022403"; // WhatsApp number without + and spaces
+
+  // Wrapper component to conditionally render Card based on data
+  const SpiceCardWrapper = ({ spice, index, showActions }: { spice: any; index: number; showActions: boolean }) => {
+    return (
+      <QueryComponent
+        api={apiRoutesByRole[spice.key]}
+        queryKey={[spice.key, apiRoutesByRole[spice.key]]}
+        page={1}
+        limit={1000}
+      >
+        {(data: any) => {
+          const fetchedData = data || [];
+          
+          // Don't render Card if product is empty and showActions is false
+          if (fetchedData.length === 0 && !showActions) {
+            return null;
+          }
+
+          return (
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: index * 0.08 }}
+              className={spice.isPrimary ? "space-y-6" : "space-y-4"}
+            >
+              <Card 
+                className={
+                  spice.isPrimary 
+                    ? "bg-gradient-to-r from-lime-500/15 to-emerald-500/15 border-2 border-lime-400/40 shadow-xl backdrop-blur-sm" 
+                    : "bg-white/5 backdrop-blur-sm border border-white/10 shadow-lg"
+                }
+              >
+                <CardBody className="p-6 md:p-8">
+                  <EssentialTabContent
+                    essentialName={spice.key}
+                    showActions={showActions}
+                    commission={0}
+                    spiceName={spice.name}
+                    isPrimary={spice.isPrimary || false}
+                  />
+                  
+                  {spice.isPrimary && (
+                    <section>
+                      <Spacer y={8} />
+                      <motion.div
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        transition={{ duration: 2, delay: 1, ease: "easeInOut" }}
+                        className="w-full font-extralight text-gray-500"
+                      >
+                        Welcome to our real-time cardamom auction rate panel, your trusted
+                        source for the latest market prices. This platform provides
+                        up-to-the-minute data from authorized auction centers, ensuring
+                        transparency and accuracy in the cardamom trade.
+                        <Spacer y={5} />
+                        <b className="text-gray-700"> Key Highlights:</b> <Spacer y={1} />
+                        <ul className="list-disc list-inside space-y-1 ml-2">
+                          <li>
+                            <b className="text-gray-700"> Real-Time Updates: </b>Stay informed with the latest auction
+                            prices as they happen.
+                          </li>
+                          <li>
+                            <b className="text-gray-700"> Authorized Sources:</b> All data is sourced from licensed
+                            auctioneers, adhering to Indian Spices Board regulations.
+                          </li>
+                        </ul>
+                        <Spacer y={5} />
+                        Empower your trading decisions with accurate and timely market insights,
+                        all consolidated in one reliable source.
+                      </motion.div>
+                    </section>
+                  )}
+                </CardBody>
+              </Card>
+              
+              {index < spices.length - 1 && <Spacer y={4} />}
+            </motion.div>
+          );
+        }}
+      </QueryComponent>
+    );
+  };
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900">
@@ -107,67 +191,17 @@ export default function OSPricing() {
           <Spacer y={6} />
 
           {/* Spices Sections */}
-          {spices.map((spice, index) => (
-            <motion.div
-              key={spice.key}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: index * 0.08 }}
-              className={spice.isPrimary ? "space-y-6" : "space-y-4"}
-            >
-              <Card 
-                className={
-                  spice.isPrimary 
-                    ? "bg-gradient-to-r from-lime-500/15 to-emerald-500/15 border-2 border-lime-400/40 shadow-xl backdrop-blur-sm" 
-                    : "bg-white/5 backdrop-blur-sm border border-white/10 shadow-lg"
-                }
-              >
-                <CardBody className="p-6 md:p-8">
-                  <EssentialTabContent
-                    essentialName={spice.key}
-                    showActions={true}
-                    commission={0}
-                    spiceName={spice.name}
-                    isPrimary={spice.isPrimary || false}
-                  />
-                  
-                  {spice.isPrimary && (
-                    <section>
-                      <Spacer y={8} />
-                      <motion.div
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        transition={{ duration: 2, delay: 1, ease: "easeInOut" }}
-                        className="w-full font-extralight text-gray-500"
-                      >
-                        Welcome to our real-time cardamom auction rate panel, your trusted
-                        source for the latest market prices. This platform provides
-                        up-to-the-minute data from authorized auction centers, ensuring
-                        transparency and accuracy in the cardamom trade.
-                        <Spacer y={5} />
-                        <b className="text-gray-700"> Key Highlights:</b> <Spacer y={1} />
-                        <ul className="list-disc list-inside space-y-1 ml-2">
-                          <li>
-                            <b className="text-gray-700"> Real-Time Updates: </b>Stay informed with the latest auction
-                            prices as they happen.
-                          </li>
-                          <li>
-                            <b className="text-gray-700"> Authorized Sources:</b> All data is sourced from licensed
-                            auctioneers, adhering to Indian Spices Board regulations.
-                          </li>
-                        </ul>
-                        <Spacer y={5} />
-                        Empower your trading decisions with accurate and timely market insights,
-                        all consolidated in one reliable source.
-                      </motion.div>
-                    </section>
-                  )}
-                </CardBody>
-              </Card>
-              
-              {index < spices.length - 1 && <Spacer y={4} />}
-            </motion.div>
-          ))}
+          {spices.map((spice, index) => {
+            // Create a wrapper that conditionally renders Card based on content
+            return (
+              <SpiceCardWrapper
+                key={spice.key}
+                spice={spice}
+                index={index}
+                showActions={true}
+              />
+            );
+          })}
 
           <Spacer y={8} />
         </div>

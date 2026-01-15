@@ -74,7 +74,7 @@ export const apiRoutesByRole: Record<string, string> = {
   pepper: "pepper",
   nutmeg: "nutmeg",
   mace: "mace",
-  Cinnamon: "cinnamon",
+  cinnamon: "cinnamon",
   honey: "honey",
   tea: "tea",
   associates: "associates",
