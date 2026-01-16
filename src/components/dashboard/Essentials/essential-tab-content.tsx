@@ -2,7 +2,6 @@
 import React from "react";
 
 import QueryComponent from "@/components/queryComponent";
-import { Spacer } from "@nextui-org/react";
 import AddModal from "@/components/CurdTable/add-model";
 import UserDeleteModal from "@/components/CurdTable/delete";
 import CommonTable from "@/components/CurdTable/common-table";
