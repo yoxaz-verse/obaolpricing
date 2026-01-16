@@ -80,11 +80,16 @@ const EditModal: React.FC<EditModalProps> = ({
     onSuccess: () => {
       console.log(formData);
 
+      // Invalidate all queries related to this endpoint
+      queryClient.invalidateQueries({
+        queryKey: [currentTable, apiEndpoint],
+      });
       queryClient.invalidateQueries();
       refetchData?.();
       closeModal();
     },
-    onError: () => {
+    onError: (error) => {
+      console.error("Error updating item:", error);
       setLoading(false);
     },
   });

@@ -40,18 +40,16 @@ const EssentialTabContent = ({
     ? columns
     : columns.filter((column: any) => column.type !== "action");
 
-  const refetchData = () => {
-    // Implement refetch logic if necessary
-  };
+  const queryKey = [essentialName, apiRoutesByRole[essentialName]];
 
   return (
     <QueryComponent
       api={apiRoutesByRole[essentialName]}
-      queryKey={[essentialName, apiRoutesByRole[essentialName]]}
+      queryKey={queryKey}
       page={1}
       limit={1000}
     >
-      {(data: any) => {
+      {(data: any, refetch?: () => void) => {
         const fetchedData = data || [];
         
         // Hide entire component if product is empty and showActions is false
@@ -61,7 +59,13 @@ const EssentialTabContent = ({
         
         const formFields = tableConfig[essentialName];
 
-        // Adjust prices by adding commission when commission is provided
+        // Store original data for edit/delete operations
+        const originalDataMap = new Map();
+        fetchedData.forEach((item: any) => {
+          originalDataMap.set(item.id, item);
+        });
+
+        // Adjust prices by adding commission when commission is provided (only for display)
         const shouldApplyCommission = commission > 0;
         const adjustedData = fetchedData.map((item: any) => {
           const { normal, export: exportPrice, price, ...rest } = item;
@@ -119,7 +123,6 @@ const EssentialTabContent = ({
                     currentTable={essentialName}
                     formFields={formFields}
                     apiEndpoint={apiRoutesByRole[essentialName]}
-                    refetchData={refetchData}
                   />
                 )}
 
@@ -127,25 +130,34 @@ const EssentialTabContent = ({
                   TableData={tableData}
                   columns={newColumns}
                   isLoading={false}
-                  editModal={(item: any) => (
-                    <div>
-                      <EditModal
-                        item={item}
-                        currentTable={essentialName}
-                        formFields={formFields}
-                        apiEndpoint={apiRoutesByRole[essentialName]}
-                        refetchData={refetchData}
+                  editModal={(item: any) => {
+                    // Get original item data (without commission adjustment) for editing
+                    const originalItem = originalDataMap.get(item.id) || item;
+                    return (
+                      <div>
+                        <EditModal
+                          item={originalItem}
+                          currentTable={essentialName}
+                          formFields={formFields}
+                          apiEndpoint={apiRoutesByRole[essentialName]}
+                          refetchData={refetch || (() => {})}
+                        />
+                      </div>
+                    );
+                  }}
+                  deleteModal={(item: any) => {
+                    // Get original item data for delete
+                    const originalItem = originalDataMap.get(item.id) || item;
+                    return (
+                      <UserDeleteModal
+                        _id={originalItem.id}
+                        name={originalItem.name}
+                        deleteApiEndpoint={apiRoutesByRole[essentialName]}
+                        queryKey={queryKey}
+                        refetchData={() => {}}
                       />
-                    </div>
-                  )}
-                  deleteModal={(item: any) => (
-                    <UserDeleteModal
-                      _id={item.id}
-                      name={item.name}
-                      deleteApiEndpoint={apiRoutesByRole[essentialName]}
-                      refetchData={refetchData}
-                    />
-                  )}
+                    );
+                  }}
                 />
               </div>
             </div>
