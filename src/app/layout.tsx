@@ -1,21 +1,22 @@
-import "../styles/global.css";
+import "./globals.css";
 import type { Metadata } from "next";
 import { Providers } from "./provider";
-import { Inter } from "next/font/google";
-import { ToastContainer } from "react-toastify";
-
-// If loading a variable font, you don't need to specify the font weight
-const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Commodity Pricing Platform - Real-Time Market Rates",
-  description:
-    "Real-time pricing platform for premium spices including cardamom, pepper, cinnamon, nutmeg, mace, honey, and tea. Live updates from authorized auction centers with accurate market insights.",
+  title: "Cardamom Intelligence | Market Rates & Analytics",
+  description: "Automated cardamom auction extraction with derived market rates, live pricing, and trend analytics. Premium B2B dashboard.",
+  keywords: ["cardamom", "auction", "pricing", "b2b", "market rates", "commodity rates", "OBAOL"],
   icons: {
-    icon: "/favicon.ico",
-    apple: "/apple-touch-icon.png",
-    shortcut: "/favicon.ico",
+    icon: '/icon.svg',
+    shortcut: '/icon.svg',
+    apple: '/icon.svg',
   },
+  openGraph: {
+    title: "Cardamom Intelligence | Premium Market Data",
+    description: "Automated cardamom commodity market tracking & insights portal.",
+    type: "website",
+  },
+  robots: "index, follow",
 };
 
 export default function RootLayout({
@@ -24,11 +25,9 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 text-white" style={{}}>
-      <body className={`${inter.className} `} style={{ overflowX: "hidden" }}>
-        {/* <AuthProvider> */}
+    <html lang="en">
+      <body>
         <Providers>{children}</Providers>
-        {/* </AuthProvider> */}
       </body>
     </html>
   );

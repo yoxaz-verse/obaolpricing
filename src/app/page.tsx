@@ -1,143 +1,223 @@
-"use client";
-
-import React from "react";
-import { motion } from "framer-motion";
-import { Card, CardBody, Chip } from "@nextui-org/react";
+import Link from "next/link";
 import Image from "next/image";
+import { PriceCard } from "@/components/cardamom/price-card";
+import { StatusPanel } from "@/components/cardamom/status-panel";
+import { TrendChart } from "@/components/cardamom/trend-chart";
+import { getHistory, getLatestRunForToday, getLatestWithPrevious, getTodayWindowStatuses } from "@/lib/history";
+import { getTrendDirection } from "@/lib/pricing";
+import { getMarketFactor, getVariantDefinitions, getVariantRupeeAddon } from "@/lib/settings";
+import { computeVariantValue, getActiveVariants } from "@/lib/variants";
 
-export default function Home() {
+export const runtime = "nodejs";
+export const dynamic = "force-dynamic";
+
+type HomePageProps = {
+  searchParams?: {
+    range?: string;
+    page?: string;
+    pageSize?: string;
+  };
+};
+
+type HistoryRow = {
+  id: string;
+  date: Date;
+  auctionAvg: number;
+};
+
+const RANGE_TO_DAYS: Record<string, number> = {
+  "1w": 7,
+  "2w": 14,
+  "30d": 30,
+  "6m": 180,
+  "1y": 365,
+  "3y": 1095,
+  "5y": 1825,
+};
+
+const RANGE_LABEL: Record<string, string> = {
+  "1w": "1-Week Auction Avg Trend",
+  "2w": "2-Week Auction Avg Trend",
+  "30d": "30-Day Auction Avg Trend",
+  "6m": "6-Month Auction Avg Trend",
+  "1y": "1-Year Auction Avg Trend",
+  "3y": "3-Year Auction Avg Trend",
+  "5y": "5-Year Auction Avg Trend",
+};
+
+function normalizeRange(value: string | undefined) {
+  if (!value) return "1y";
+  if (["1w", "2w", "30d", "6m", "1y", "3y", "5y"].includes(value)) return value;
+  return "1y";
+}
+
+function normalizePage(value: string | undefined, fallback = 1) {
+  const parsed = Number(value);
+  if (!Number.isFinite(parsed)) return fallback;
+  return Math.max(Math.floor(parsed), 1);
+}
+
+function formatDate(value: Date | null) {
+  if (!value) return "-";
+  return new Intl.DateTimeFormat("en-IN", {
+    dateStyle: "medium",
+    timeZone: "Asia/Kolkata",
+  }).format(value);
+}
+
+
+export default async function HomePage({ searchParams }: HomePageProps) {
+  const isDbConfigured = Boolean(process.env.DATABASE_URL);
+  const range = normalizeRange(searchParams?.range);
+  const tablePage = normalizePage(searchParams?.page, 1);
+  const tablePageSize = Math.min(Math.max(normalizePage(searchParams?.pageSize, 15), 5), 50);
+  const days = RANGE_TO_DAYS[range];
+
+  const [{ latest, previous }, history, run, windows, marketFactor, variantRupeeAddon, allVariants] = await Promise.all([
+    getLatestWithPrevious(),
+    getHistory(days),
+    getLatestRunForToday(),
+    getTodayWindowStatuses(),
+    getMarketFactor(),
+    getVariantRupeeAddon(),
+    getVariantDefinitions(),
+  ]);
+
+  const variants = getActiveVariants(allVariants);
+  const trend = latest ? getTrendDirection(latest.auctionAvg, previous?.auctionAvg ?? null) : "flat";
+  const trendText = trend === "up" ? "↑ Up" : trend === "down" ? "↓ Down" : "→ Flat";
+  const hasHistory = history.length > 0;
+  const orderedDesc = history.slice().sort((a, b) => b.date.getTime() - a.date.getTime());
+  const totalPages = Math.max(Math.ceil(orderedDesc.length / tablePageSize), 1);
+  const safeTablePage = Math.min(tablePage, totalPages);
+  const tableStart = (safeTablePage - 1) * tablePageSize;
+  const tableRows = orderedDesc.slice(tableStart, tableStart + tablePageSize);
+  const tableQuery = `range=${range}&pageSize=${tablePageSize}`;
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 text-white overflow-hidden">
-      {/* Background Decorative Elements */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-0 right-0 w-96 h-96 bg-lime-500/10 rounded-full blur-3xl"></div>
-        <div className="absolute bottom-0 left-0 w-96 h-96 bg-emerald-500/10 rounded-full blur-3xl"></div>
-      </div>
+    <main className="min-h-screen bg-[#090D0A] text-slate-100 font-sans selection:bg-[#c38a3a]/30">
+      <div className="mx-auto max-w-7xl px-4 py-8 md:px-6 md:py-10">
+        {!isDbConfigured ? (
+          <div className="mb-4 rounded-xl border border-amber-500/40 bg-amber-500/10 px-4 py-3 text-sm text-amber-200">
+            `DATABASE_URL` is missing. Add it in your `.env` file and restart the server.
+          </div>
+        ) : null}
 
-      <div className="relative z-10 container mx-auto px-4 py-16 md:py-24">
-        {/* Hero Section */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-          className="text-center mb-20"
-        >
-          <motion.div
-            initial={{ scale: 0.9, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            transition={{ delay: 0.2, duration: 0.6 }}
-            className="mb-6"
-          >
-            <Chip
-              color="success"
-              variant="flat"
-              className="text-green-400 bg-green-500/20 border border-green-400/30 mb-6"
-            >
-              Live Platform
-            </Chip>
-          </motion.div>
-          
-          <h1 className="text-5xl md:text-7xl font-bold mb-6 bg-gradient-to-r from-lime-400 via-green-400 to-emerald-400 bg-clip-text text-transparent">
-            Spice Pricing Platform
-          </h1>
-          
-          <p className="text-xl md:text-2xl text-gray-300 max-w-3xl mx-auto mb-8">
-            Real-time market rates for premium spices. 
-            <span className="text-lime-400 font-semibold"> Live. Accurate. Transparent.</span>
+        <header className="mb-8 rounded-2xl border border-[#1A261E] bg-[#0E1511] p-6 shadow-2xl">
+          <div className="flex items-center justify-between">
+            <p className="text-xs font-bold uppercase tracking-[0.2em] text-[#c38a3a]">Cardamom Panel</p>
+            <Image src="/Obaol.png" alt="OBAOL Logo" width={160} height={40} className="h-8 w-auto object-contain opacity-90" priority />
+          </div>
+          <h1 className="mt-4 text-3xl font-extrabold tracking-tight text-white md:text-4xl">Market Intelligence</h1>
+          <p className="mt-2 text-slate-400">
+            Today: <span className="text-slate-200">{formatDate(latest?.date ?? null)}</span> <span className="opacity-50 mx-2">|</span> Trend: <span className="text-[#c38a3a] font-medium">{trendText}</span>
           </p>
-        </motion.div>
+          <div className="mt-4 flex flex-wrap items-center gap-2">
+            {(["1w", "2w", "30d", "6m", "1y", "3y", "5y"] as const).map((key) => (
+              <Link
+                key={key}
+                href={key === "1y" ? "/" : `/?range=${key}`}
+                className={[
+                  "rounded-md border px-3 py-1.5 text-xs font-semibold uppercase tracking-wider transition-colors",
+                  range === key
+                    ? "border-[#c38a3a] bg-[#c38a3a]/10 text-[#c38a3a] shadow-[0_0_10px_rgba(195,138,58,0.15)]"
+                    : "border-[#1A261E] bg-[#111A15] text-slate-400 hover:border-[#2C4033] hover:text-slate-200",
+                ].join(" ")}
+              >
+                {key}
+              </Link>
+            ))}
+          </div>
+        </header>
 
-        {/* Introduction Section */}
-        <motion.div
-          initial={{ opacity: 0, y: 40 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.4, duration: 0.8 }}
-          className="max-w-5xl mx-auto mb-20"
-        >
-          <Card className="bg-white/5 backdrop-blur-md border border-white/10 shadow-2xl">
-            <CardBody className="p-8 md:p-12">
-              <h2 className="text-3xl md:text-4xl font-bold mb-6 text-center">
-                Welcome to Our Platform
-              </h2>
-              <div className="space-y-6 text-lg text-gray-300 leading-relaxed">
-                <p>
-                  We provide a comprehensive, real-time pricing platform for premium spices, 
-                  giving you instant access to the latest market rates directly from authorized 
-                  auction centers across India.
-                </p>
-                <p>
-                  Our platform offers up-to-the-minute data for cardamom, pepper, cinnamon, 
-                  nutmeg, mace, honey, and tea, ensuring you always have the most current 
-                  pricing information at your fingertips.
-                </p>
-                <p className="text-lime-400 font-semibold">
-                  This is a live platform that updates continuously, providing transparent 
-                  and accurate market insights to empower your trading decisions.
-                </p>
-              </div>
-            </CardBody>
-          </Card>
-        </motion.div>
-
-        {/* Features Grid */}
-        <motion.div
-          initial={{ opacity: 0, y: 40 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.6, duration: 0.8 }}
-          className="grid md:grid-cols-3 gap-6 max-w-6xl mx-auto mb-20"
-        >
-          {[
-            {
-              title: "Real-Time Updates",
-              description: "Stay informed with live pricing data that updates continuously throughout the day.",
-              icon: "⚡",
-            },
-            {
-              title: "Authorized Sources",
-              description: "All data is sourced from licensed auctioneers, adhering to Indian Spices Board regulations.",
-              icon: "✓",
-            },
-            {
-              title: "Comprehensive Coverage",
-              description: "Access pricing information for multiple premium spices all in one place.",
-              icon: "📊",
-            },
-          ].map((feature, index) => (
-            <motion.div
-              key={index}
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.7 + index * 0.1, duration: 0.6 }}
-            >
-              <Card className="bg-white/5 backdrop-blur-md border border-white/10 hover:border-lime-400/30 transition-all duration-300 h-full">
-                <CardBody className="p-6 text-center">
-                  <div className="text-4xl mb-4">{feature.icon}</div>
-                  <h3 className="text-xl font-bold mb-3 text-lime-400">{feature.title}</h3>
-                  <p className="text-gray-400">{feature.description}</p>
-                </CardBody>
-              </Card>
-            </motion.div>
+        <section className="grid gap-3 grid-cols-2 md:grid-cols-4 lg:grid-cols-4 xl:grid-cols-8 overflow-hidden">
+          <PriceCard label="Auction Avg (AP)" value={latest?.auctionAvg ?? null} accent />
+          {variants.map((variant) => (
+            <PriceCard
+              key={variant.id}
+              label={`${variant.label} (Live)`}
+              value={latest ? computeVariantValue(latest.auctionAvg, marketFactor, variant.multiplier, variantRupeeAddon) : null}
+            />
           ))}
-        </motion.div>
+        </section>
 
-        {/* Bottom Section */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 1, duration: 0.8 }}
-          className="text-center"
-        >
-          <Card className="bg-gradient-to-r from-lime-500/10 to-emerald-500/10 border border-lime-400/20 backdrop-blur-md">
-            <CardBody className="p-8">
-              <p className="text-xl md:text-2xl text-gray-700">
-                Empowering your trading decisions with{" "}
-                <span className="text-lime-400 font-bold">accurate</span> and{" "}
-                <span className="text-lime-400 font-bold">timely</span> market insights
-              </p>
-            </CardBody>
-          </Card>
-        </motion.div>
+        <section className="mt-6 grid gap-6 lg:grid-cols-[2fr_1fr]">
+          <TrendChart
+            title={RANGE_LABEL[range]}
+            series={[
+              {
+                id: "auctionAvg",
+                label: "Auction Avg",
+                color: "#c38a3a",
+                points: (history as HistoryRow[]).map((item) => ({
+                  date: new Intl.DateTimeFormat("en-IN", {
+                    month: "short",
+                    day: "numeric",
+                    timeZone: "Asia/Kolkata",
+                  }).format(item.date),
+                  value: item.auctionAvg,
+                })),
+              },
+            ]}
+          />
+
+          <StatusPanel
+            status={run?.status ?? null}
+            error={run?.error ?? null}
+            sourceRef={run?.videoId ?? null}
+            startedAt={run?.startedAt ?? null}
+            finishedAt={run?.finishedAt ?? null}
+            sourceUrl={latest?.videoUrl ?? null}
+            slot1100={windows.slot1100}
+            slot1400={windows.slot1400}
+          />
+        </section>
+
+        {!hasHistory ? (
+          <section className="mt-6 rounded-xl border border-[#1A261E] bg-[#0E1511] p-5 text-sm text-slate-400">
+            No rate history yet. Use the <Link href="/admin" className="text-[#c38a3a] hover:underline font-medium">Admin Control Center</Link> to run archive import (2015+) and then daily sync.
+          </section>
+        ) : null}
+
+        <section className="mt-6 rounded-2xl border border-[#1A261E] bg-[#0E1511] p-5 shadow-xl">
+          <h2 className="mb-4 text-xs font-bold uppercase tracking-[0.15em] text-slate-500">Recent AP Data</h2>
+          <div className="overflow-x-auto">
+            <table className="w-full min-w-[500px] text-left text-sm">
+              <thead className="text-xs uppercase tracking-wider text-slate-500 border-b border-[#1A261E]">
+                <tr>
+                  <th className="pb-3 font-semibold">Date</th>
+                  <th className="pb-3 font-semibold text-right">Auction Avg</th>
+                </tr>
+              </thead>
+              <tbody>
+                {tableRows.map((row) => (
+                  <tr key={row.id} className="border-t border-[#1A261E]/50 text-slate-200 hover:bg-[#151D18] transition-colors">
+                    <td className="py-3">{formatDate(row.date)}</td>
+                    <td className="py-3 text-right font-medium text-[#c38a3a]">₹{Math.round(row.auctionAvg).toLocaleString("en-IN", { maximumFractionDigits: 0 })}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          <div className="mt-4 flex items-center justify-between text-xs font-medium text-slate-500">
+            <span>Page {safeTablePage} of {totalPages} <span className="mx-2 opacity-50">|</span> {orderedDesc.length} records</span>
+            <div className="flex gap-2">
+              <Link
+                href={safeTablePage <= 1 ? `/?${tableQuery}&page=1` : `/?${tableQuery}&page=${safeTablePage - 1}`}
+                className={`rounded border border-[#1A261E] bg-[#111A15] px-3 py-1.5 transition-colors ${safeTablePage <= 1 ? "pointer-events-none opacity-40" : "hover:border-[#2C4033] hover:text-slate-300"}`}
+              >
+                Prev
+              </Link>
+              <Link
+                href={`/?${tableQuery}&page=${Math.min(safeTablePage + 1, totalPages)}`}
+                className={`rounded border border-[#1A261E] bg-[#111A15] px-3 py-1.5 transition-colors ${safeTablePage >= totalPages ? "pointer-events-none opacity-40" : "hover:border-[#2C4033] hover:text-slate-300"}`}
+              >
+                Next
+              </Link>
+            </div>
+          </div>
+        </section>
       </div>
-    </div>
+    </main>
   );
 }

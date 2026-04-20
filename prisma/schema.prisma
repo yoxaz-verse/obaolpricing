@@ -1,0 +1,93 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum RunType {
+  daily
+  backfill
+  manual
+}
+
+enum RunStatus {
+  pending
+  processing
+  success
+  failed
+}
+
+enum AdminJobType {
+  sync_latest
+  archive_import
+}
+
+enum AdminJobStatus {
+  queued
+  running
+  completed
+  failed
+}
+
+model AuctionPrice {
+  id           String   @id @default(cuid())
+  date         DateTime @unique @db.Date
+  videoUrl     String   @map("video_url")
+  auctionAvg   Float    @map("auction_avg")
+  marketFactor Float    @default(1.02) @map("market_factor")
+  extractedAt  DateTime @map("extracted_at")
+  createdAt    DateTime @default(now()) @map("created_at")
+  updatedAt    DateTime @updatedAt @map("updated_at")
+
+  @@map("auction_prices")
+}
+
+model ExtractionRun {
+  id                  String    @id @default(cuid())
+  runType             RunType   @map("run_type")
+  runDate             DateTime  @db.Date @map("run_date")
+  videoId             String?   @map("video_id")
+  status              RunStatus @default(pending)
+  attemptedTimestamps Json      @default("[]") @map("attempted_timestamps")
+  chosenTimestamp     Int?      @map("chosen_timestamp")
+  rawOcrOutputs       Json      @default("[]") @map("raw_ocr_outputs")
+  error               String?
+  startedAt           DateTime  @default(now()) @map("started_at")
+  finishedAt          DateTime? @map("finished_at")
+  createdAt           DateTime  @default(now()) @map("created_at")
+  updatedAt           DateTime  @updatedAt @map("updated_at")
+
+  @@index([runDate, status])
+  @@map("extraction_runs")
+}
+
+model AppSetting {
+  key       String   @id
+  value     Json
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("app_settings")
+}
+
+model AdminJob {
+  id             String         @id @default(cuid())
+  jobType        AdminJobType   @map("job_type")
+  status         AdminJobStatus @default(queued)
+  totalItems     Int            @default(0) @map("total_items")
+  processedItems Int            @default(0) @map("processed_items")
+  successCount   Int            @default(0) @map("success_count")
+  errorCount     Int            @default(0) @map("error_count")
+  message        String?
+  meta           Json           @default("{}")
+  startedAt      DateTime?      @map("started_at")
+  finishedAt     DateTime?      @map("finished_at")
+  createdAt      DateTime       @default(now()) @map("created_at")
+  updatedAt      DateTime       @updatedAt @map("updated_at")
+
+  @@index([jobType, status, createdAt])
+  @@map("admin_jobs")
+}

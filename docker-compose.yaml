@@ -1,14 +1,53 @@
 version: "3.8"
 
 services:
+  postgres:
+    image: postgres:16
+    container_name: cardamom-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: cardamom_pricing
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
   web:
     build:
       context: .
       dockerfile: Dockerfile
+    container_name: cardamom-web
+    depends_on:
+      - postgres
     ports:
-      - "3000:3000" # Map port 3000 on the host to port 3000 in the container
+      - "3000:3000"
     environment:
-      NODE_ENV: production # Set the environment to production
-    volumes:
-      - .:/app # Optional, for development to sync files
-      - /app/node_modules # Prevent overwriting node_modules
+      NODE_ENV: production
+      DATABASE_URL: postgresql://postgres:postgres@postgres:5432/cardamom_pricing?schema=public
+      DEFAULT_MARKET_FACTOR: "1.02"
+      WORKER_URL: http://worker:4010
+      WORKER_SHARED_SECRET: replace-with-shared-secret
+      ADMIN_API_TOKEN: replace-with-admin-token
+      CRON_SECRET: replace-with-cron-secret
+
+  worker:
+    build:
+      context: .
+      dockerfile: worker/Dockerfile
+    container_name: cardamom-worker
+    depends_on:
+      - postgres
+    ports:
+      - "4010:4010"
+    environment:
+      NODE_ENV: production
+      PORT: "4010"
+      DATABASE_URL: postgresql://postgres:postgres@postgres:5432/cardamom_pricing?schema=public
+      DEFAULT_MARKET_FACTOR: "1.02"
+      WORKER_SHARED_SECRET: replace-with-shared-secret
+      YOUTUBE_CHANNEL_URL: https://www.youtube.com/@SpicesBoardIndia/videos
+
+volumes:
+  postgres_data:

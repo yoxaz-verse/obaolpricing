@@ -1,42 +1,32 @@
-'use client'
-import { errorCardData } from "@/data/content-data";
-import { Button, Card, CardBody } from "@nextui-org/react";
+"use client";
+
 import { useEffect } from "react";
-import { tv } from 'tailwind-variants';
-
-const errorCard = tv({
-  slots: {
-    buttonWrapper: 'w-1/4 text-white rounded-md bg-gradient-to-r from-blue-500 via-blue-400 to-blue-300',
-    cardWrapper: 'flex justify-center items-center w-1/2 h-3/5',
-    cardBodyWrapper: 'flex flex-col items-center justify-center',
-    headingWrapper: 'text-6xl font-bold',
-    subHeadingWrapper: 'text-2xl mb-4',
-  }
-});
-
-const { buttonWrapper, cardWrapper, cardBodyWrapper, headingWrapper, subHeadingWrapper } = errorCard();
 
 export default function Error({
   error,
   reset,
 }: {
-  error: Error
-  reset: () => void
+  error: Error;
+  reset: () => void;
 }) {
   useEffect(() => {
-    console.error(error)
-  }, [error])
+    console.error(error);
+  }, [error]);
 
   return (
-    <div className="flex justify-center items-center h-screen">
-      <Card className={cardWrapper()}>
-        <CardBody className={cardBodyWrapper()}>
-          <h1 className={headingWrapper()}>Oops!</h1>
-          <h2 className={subHeadingWrapper()}>404 - Something went wrong</h2>
-          <p className="text-left w-3/4">{errorCardData}</p>
-          <Button onPress={() => reset()} className={`${buttonWrapper()}`}>Reload</Button>
-        </CardBody>
-      </Card>
-    </div>
-  )
+    <main className="flex min-h-screen items-center justify-center bg-slate-950 px-6 text-slate-100">
+      <div className="w-full max-w-lg rounded-2xl border border-slate-800 bg-slate-900/80 p-8">
+        <h1 className="text-2xl font-bold text-white">Something went wrong</h1>
+        <p className="mt-2 text-sm text-slate-400">
+          An unexpected error occurred while loading this page.
+        </p>
+        <button
+          onClick={reset}
+          className="mt-6 rounded-lg border border-slate-700 px-4 py-2 text-sm text-slate-200 hover:bg-slate-800"
+        >
+          Try again
+        </button>
+      </div>
+    </main>
+  );
 }
