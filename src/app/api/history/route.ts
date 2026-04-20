@@ -9,7 +9,7 @@ export async function GET(request: NextRequest) {
     const daysRaw = request.nextUrl.searchParams.get("days");
     const parsed = daysRaw ? Number(daysRaw) : 365;
     const days = Number.isFinite(parsed) ? parsed : 365;
-    const safeDays = Math.min(Math.max(days, 1), 365);
+    const safeDays = Math.min(Math.max(days, 1), 1825);
     const pageRaw = Number(request.nextUrl.searchParams.get("page") ?? 1);
     const pageSizeRaw = Number(request.nextUrl.searchParams.get("pageSize") ?? 15);
     const page = Math.max(Number.isFinite(pageRaw) ? Math.floor(pageRaw) : 1, 1);

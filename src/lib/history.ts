@@ -8,7 +8,7 @@ function hasDatabaseUrl() {
 export async function getHistory(days: number) {
   if (!hasDatabaseUrl()) return [];
 
-  const safeDays = Math.min(Math.max(days, 1), 365);
+  const safeDays = Math.min(Math.max(days, 1), 1825);
   const since = new Date();
   since.setDate(since.getDate() - safeDays + 1);
   since.setHours(0, 0, 0, 0);

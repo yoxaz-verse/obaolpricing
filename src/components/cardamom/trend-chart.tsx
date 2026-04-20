@@ -20,7 +20,7 @@ export type TrendSeries = {
   id: string;
   label: string;
   color: string;
-  points: Array<{ date: string; value: number }>;
+  points: Array<{ date: string; value: number; tooltipDate?: string }>;
 };
 
 type TrendChartProps = {
@@ -85,6 +85,12 @@ export function TrendChart({ title = "Trend", series }: TrendChartProps) {
           titleColor: "#a7f3d0",
           bodyColor: "#a7f3d0",
           callbacks: {
+            title(items) {
+              const first = items[0];
+              if (!first) return "";
+              const point = activeSeries[0]?.points[first.dataIndex];
+              return point?.tooltipDate ?? String(first.label ?? "");
+            },
             label(context) {
               const value = Number(context.raw);
               return `${context.dataset.label}: Rs ${Math.round(value).toLocaleString("en-IN")}`;
@@ -108,7 +114,7 @@ export function TrendChart({ title = "Trend", series }: TrendChartProps) {
         },
       },
     }),
-    [],
+    [activeSeries],
   );
 
   if (!activeSeries.length || !labels.length) {

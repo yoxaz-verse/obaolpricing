@@ -156,6 +156,10 @@ export default async function HomePage({ searchParams }: HomePageProps) {
                     timeZone: "Asia/Kolkata",
                   }).format(item.date),
                   value: item.auctionAvg,
+                  tooltipDate: new Intl.DateTimeFormat("en-IN", {
+                    dateStyle: "medium",
+                    timeZone: "Asia/Kolkata",
+                  }).format(item.date),
                 })),
               },
             ]}
