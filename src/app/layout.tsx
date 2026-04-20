@@ -7,9 +7,9 @@ export const metadata: Metadata = {
   description: "Automated cardamom auction extraction with derived market rates, live pricing, and trend analytics. Premium B2B dashboard.",
   keywords: ["cardamom", "auction", "pricing", "b2b", "market rates", "commodity rates", "OBAOL"],
   icons: {
-    icon: '/icon.svg',
-    shortcut: '/icon.svg',
-    apple: '/icon.svg',
+    icon: '/favicon.ico',
+    shortcut: '/favicon.ico',
+    apple: '/favicon.ico',
   },
   openGraph: {
     title: "Cardamom Intelligence | Premium Market Data",
