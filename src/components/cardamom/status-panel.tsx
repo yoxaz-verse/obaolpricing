@@ -42,7 +42,7 @@ export function StatusPanel(props: StatusPanelProps) {
       </div>
       <div className="mb-4 flex flex-wrap gap-2">
         <span className={`rounded-full border px-3 py-1 text-[11px] font-medium tracking-wide ${windowChipClass(props.slot1100)}`}>
-          11:00 IST: {props.slot1100}
+          12:15 IST: {props.slot1100}
         </span>
         <span className={`rounded-full border px-3 py-1 text-[11px] font-medium tracking-wide ${windowChipClass(props.slot1400)}`}>
           14:00 IST: {props.slot1400}
@@ -71,7 +71,7 @@ export function StatusPanel(props: StatusPanelProps) {
             Connect via WhatsApp for any enquiries or purchase related process
           </p>
           <a
-            href="https://wa.me/919019351483"
+            href="https://wa.me/919019351483?text=Hi%2C%20I%20am%20enquiring%20about%20the%20cardamom%20through%20the%20cardamom.obaol.com%20website%20and%20would%20like%20to%20get%20a%20quote%20of%20(name%20your%20quality)%3A"
             target="_blank"
             rel="noreferrer"
             className="flex w-full items-center justify-center gap-2.5 rounded-xl bg-[#25D366] px-4 py-3 text-sm font-bold text-white shadow-lg transition-transform hover:scale-[1.02] active:scale-95"

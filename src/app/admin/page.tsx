@@ -450,7 +450,7 @@ export default function AdminPage() {
           <p className="mt-1 text-sm text-slate-400">Daily live sync operations.</p>
           <div className="mt-4 flex flex-wrap gap-2">
             <span className={`rounded-full border px-3 py-1 text-xs ${badgeClass(windowStatus.slot1100)}`}>
-              11:00 IST: {windowStatus.slot1100}
+              12:15 IST: {windowStatus.slot1100}
             </span>
             <span className={`rounded-full border px-3 py-1 text-xs ${badgeClass(windowStatus.slot1400)}`}>
               14:00 IST: {windowStatus.slot1400}
