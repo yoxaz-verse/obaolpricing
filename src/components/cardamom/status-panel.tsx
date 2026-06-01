@@ -33,9 +33,9 @@ export function StatusPanel(props: StatusPanelProps) {
   };
 
   return (
-    <div className="rounded-2xl border border-[#1A261E] bg-[#0E1511] p-5 shadow-xl">
+    <div className="rounded-3xl border border-[#1f3027] bg-gradient-to-b from-[#0f1b15] to-[#0b1410] p-5 shadow-xl">
       <div className="mb-4 flex items-center justify-between">
-        <h3 className="text-xs font-bold uppercase tracking-widest text-[#10b981]">Sync Status</h3>
+        <h3 className="text-xs font-bold uppercase tracking-widest text-[#64d3a1]">Sync Status</h3>
         <span className={`rounded-full border px-3 py-1 text-xs font-semibold tracking-wide ${chipClass}`}>
           {props.status ?? "no-run"}
         </span>
@@ -49,12 +49,12 @@ export function StatusPanel(props: StatusPanelProps) {
         </span>
       </div>
       <div className="space-y-3 text-sm text-slate-300">
-        <p className="flex justify-between border-b border-[#1A261E] pb-2">
-          <span className="text-[#10b981]">Last Updated</span>
+        <p className="flex justify-between border-b border-[#253b30] pb-2">
+          <span className="text-[#64d3a1]">Last Updated</span>
           <span className="font-medium text-slate-200">{formatDateTime(props.finishedAt) === "-" ? formatDateTime(props.startedAt) : formatDateTime(props.finishedAt)}</span>
         </p>
         <p className="flex justify-between pt-1">
-          <span className="text-[#10b981]">AP Data Source</span>
+          <span className="text-[#64d3a1]">AP Data Source</span>
           {props.sourceUrl ? (
             <a href={props.sourceUrl} target="_blank" rel="noreferrer" className="font-medium text-[#c38a3a] hover:text-[#e0a656] hover:underline underline-offset-2 transition-colors">
               Spices Board India
@@ -66,7 +66,7 @@ export function StatusPanel(props: StatusPanelProps) {
         
         {props.error ? <p className="mt-4 rounded-md bg-red-500/10 p-3 text-xs font-medium text-red-400 border border-red-500/20">Error: {props.error}</p> : null}
 
-        <div className="mt-6 rounded-xl border border-[#1A261E] bg-[#111A15] p-4 text-center">
+        <div className="mt-6 rounded-2xl border border-[#263d31] bg-[#101a15] p-4 text-center">
           <p className="mb-3 text-xs text-slate-400">
             Connect via WhatsApp for any enquiries or purchase related process
           </p>

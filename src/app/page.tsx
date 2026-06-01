@@ -5,8 +5,6 @@ import { StatusPanel } from "@/components/cardamom/status-panel";
 import { TrendChart } from "@/components/cardamom/trend-chart";
 import { getHistory, getLatestRunForToday, getLatestWithPrevious, getTodayWindowStatuses } from "@/lib/history";
 import { getTrendDirection } from "@/lib/pricing";
-import { getMarketFactor, getVariantDefinitions, getVariantRupeeAddon } from "@/lib/settings";
-import { computeVariantValue, getActiveVariants } from "@/lib/variants";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -73,17 +71,12 @@ export default async function HomePage({ searchParams }: HomePageProps) {
   const tablePageSize = Math.min(Math.max(normalizePage(searchParams?.pageSize, 15), 5), 50);
   const days = RANGE_TO_DAYS[range];
 
-  const [{ latest, previous }, history, run, windows, marketFactor, variantRupeeAddon, allVariants] = await Promise.all([
+  const [{ latest, previous }, history, run, windows] = await Promise.all([
     getLatestWithPrevious(),
     getHistory(days),
     getLatestRunForToday(),
     getTodayWindowStatuses(),
-    getMarketFactor(),
-    getVariantRupeeAddon(),
-    getVariantDefinitions(),
   ]);
-
-  const variants = getActiveVariants(allVariants);
   const trend = latest ? getTrendDirection(latest.auctionAvg, previous?.auctionAvg ?? null) : "flat";
   const trendText = trend === "up" ? "↑ Up" : trend === "down" ? "↓ Down" : "→ Flat";
   const hasHistory = history.length > 0;
@@ -93,52 +86,54 @@ export default async function HomePage({ searchParams }: HomePageProps) {
   const tableStart = (safeTablePage - 1) * tablePageSize;
   const tableRows = orderedDesc.slice(tableStart, tableStart + tablePageSize);
   const tableQuery = `range=${range}&pageSize=${tablePageSize}`;
+  const trendTone = trend === "up" ? "text-emerald-300" : trend === "down" ? "text-rose-300" : "text-slate-300";
 
   return (
-    <main className="min-h-screen bg-[#090D0A] text-slate-100 font-sans selection:bg-[#c38a3a]/30">
-      <div className="mx-auto max-w-7xl px-4 py-8 md:px-6 md:py-10">
+    <main className="relative min-h-screen overflow-hidden bg-[#060A08] text-slate-100 selection:bg-[#c38a3a]/30">
+      <div className="pointer-events-none absolute inset-0">
+        <div className="absolute -top-28 left-[-8%] h-72 w-72 rounded-full bg-[#14532d]/30 blur-3xl" />
+        <div className="absolute top-[24%] right-[-10%] h-80 w-80 rounded-full bg-[#c38a3a]/10 blur-3xl" />
+        <div className="absolute bottom-[-16%] left-[26%] h-72 w-72 rounded-full bg-[#0f766e]/20 blur-3xl" />
+      </div>
+
+      <div className="relative mx-auto max-w-7xl px-4 py-8 md:px-6 md:py-10">
         {!isDbConfigured ? (
           <div className="mb-4 rounded-xl border border-amber-500/40 bg-amber-500/10 px-4 py-3 text-sm text-amber-200">
             `DATABASE_URL` is missing. Add it in your `.env` file and restart the server.
           </div>
         ) : null}
 
-        <header className="mb-8 rounded-2xl border border-[#1A261E] bg-[#0E1511] p-6 shadow-2xl">
+        <header className="mb-8 rounded-3xl border border-[#214030] bg-gradient-to-r from-[#0E1813] via-[#08110D] to-[#07120D] p-7 shadow-[0_20px_80px_rgba(0,0,0,0.55)] md:p-8">
           <div className="flex items-center justify-between">
-            <p className="text-xs font-bold uppercase tracking-[0.2em] text-[#c38a3a]">Cardamom Panel</p>
-            <Image src="/Obaol.png" alt="OBAOL Logo" width={160} height={40} className="h-8 w-auto object-contain opacity-90" priority />
+            <p className="text-xs font-bold uppercase tracking-[0.24em] text-[#d5a45d]">Cardamom Panel</p>
+            <Image src="/Obaol.png" alt="OBAOL Logo" width={160} height={40} className="h-8 w-auto object-contain opacity-95" priority />
           </div>
-          <h1 className="mt-4 text-3xl font-extrabold tracking-tight text-white md:text-4xl">Market Intelligence</h1>
-          <p className="mt-2 text-slate-400">
+          <h1 className="mt-4 text-3xl font-extrabold tracking-tight text-white md:text-5xl">Market Intelligence</h1>
+          <p className="mt-3 text-lg text-slate-400">
             Today: <span className="text-slate-200">{formatDate(latest?.date ?? null)}</span> <span className="opacity-50 mx-2">|</span> Trend: <span className="text-[#c38a3a] font-medium">{trendText}</span>
+            <span className={`ml-2 inline-block h-2.5 w-2.5 rounded-full ${trend === "up" ? "bg-emerald-300" : trend === "down" ? "bg-rose-300" : "bg-slate-300"}`} />
           </p>
-          <div className="mt-4 flex flex-wrap items-center gap-2">
+          <div className="mt-6 flex flex-wrap items-center gap-2">
             {(["1w", "2w", "30d", "6m", "1y", "3y", "5y"] as const).map((key) => (
               <Link
                 key={key}
                 href={key === "1y" ? "/" : `/?range=${key}`}
                 className={[
-                  "rounded-md border px-3 py-1.5 text-xs font-semibold uppercase tracking-wider transition-colors",
+                  "rounded-lg border px-3 py-2 text-xs font-semibold uppercase tracking-wider transition-all",
                   range === key
-                    ? "border-[#c38a3a] bg-[#c38a3a]/10 text-[#c38a3a] shadow-[0_0_10px_rgba(195,138,58,0.15)]"
-                    : "border-[#1A261E] bg-[#111A15] text-slate-400 hover:border-[#2C4033] hover:text-slate-200",
+                    ? "border-[#c38a3a] bg-[#c38a3a]/15 text-[#e7ba77] shadow-[0_0_14px_rgba(195,138,58,0.2)]"
+                    : "border-[#1f3027] bg-[#0e1713] text-slate-400 hover:border-[#355645] hover:text-slate-200",
                 ].join(" ")}
               >
                 {key}
               </Link>
             ))}
           </div>
+          <p className={`mt-4 text-xs font-medium ${trendTone}`}>Live dashboard signal: {trend === "up" ? "buyer sentiment strengthening" : trend === "down" ? "softening demand window" : "stable movement range"}</p>
         </header>
 
-        <section className="grid gap-3 grid-cols-2 md:grid-cols-4 lg:grid-cols-4 xl:grid-cols-8 overflow-hidden">
+        <section className="grid gap-3 grid-cols-1 overflow-hidden">
           <PriceCard label="Auction Avg (AP)" value={latest?.auctionAvg ?? null} accent />
-          {variants.map((variant) => (
-            <PriceCard
-              key={variant.id}
-              label={`${variant.label} (Live)`}
-              value={latest ? computeVariantValue(latest.auctionAvg, marketFactor, variant.multiplier, variantRupeeAddon) : null}
-            />
-          ))}
         </section>
 
         <section className="mt-6 grid gap-6 lg:grid-cols-[2fr_1fr]">
@@ -183,11 +178,11 @@ export default async function HomePage({ searchParams }: HomePageProps) {
           </section>
         ) : null}
 
-        <section className="mt-6 rounded-2xl border border-[#1A261E] bg-[#0E1511] p-5 shadow-xl">
+        <section className="mt-6 rounded-2xl border border-[#1f3027] bg-gradient-to-b from-[#0d1712] to-[#0a120e] p-5 shadow-xl">
           <h2 className="mb-4 text-xs font-bold uppercase tracking-[0.15em] text-slate-500">Recent AP Data</h2>
           <div className="overflow-x-auto">
             <table className="w-full min-w-[500px] text-left text-sm">
-              <thead className="text-xs uppercase tracking-wider text-slate-500 border-b border-[#1A261E]">
+              <thead className="text-xs uppercase tracking-wider text-slate-500 border-b border-[#24392e]">
                 <tr>
                   <th className="pb-3 font-semibold">Date</th>
                   <th className="pb-3 font-semibold text-right">Auction Avg</th>
@@ -195,7 +190,7 @@ export default async function HomePage({ searchParams }: HomePageProps) {
               </thead>
               <tbody>
                 {tableRows.map((row) => (
-                  <tr key={row.id} className="border-t border-[#1A261E]/50 text-slate-200 hover:bg-[#151D18] transition-colors">
+                  <tr key={row.id} className="border-t border-[#24392e]/60 text-slate-200 transition-colors hover:bg-[#122019]">
                     <td className="py-3">{formatDate(row.date)}</td>
                     <td className="py-3 text-right font-medium text-[#c38a3a]">₹{Math.round(row.auctionAvg).toLocaleString("en-IN", { maximumFractionDigits: 0 })}</td>
                   </tr>

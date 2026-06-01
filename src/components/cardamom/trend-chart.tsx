@@ -119,16 +119,16 @@ export function TrendChart({ title = "Trend", series }: TrendChartProps) {
 
   if (!activeSeries.length || !labels.length) {
     return (
-      <div className="rounded-2xl border border-[#1A261E] bg-[#0E1511] p-5 shadow-xl">
-        <h3 className="text-xs font-bold uppercase tracking-widest text-[#10b981]">{title}</h3>
+      <div className="rounded-3xl border border-[#1f3027] bg-gradient-to-b from-[#0f1b15] to-[#0b1410] p-5 shadow-xl">
+        <h3 className="text-xs font-bold uppercase tracking-widest text-[#64d3a1]">{title}</h3>
         <p className="mt-4 text-sm text-slate-500">No trend data yet. Run sync from admin to populate trend lines.</p>
       </div>
     );
   }
 
   return (
-    <div className="rounded-2xl border border-[#1A261E] bg-[#0E1511] p-5 shadow-xl">
-      <h3 className="mb-4 text-xs font-bold uppercase tracking-widest text-[#10b981]">{title}</h3>
+    <div className="rounded-3xl border border-[#1f3027] bg-gradient-to-b from-[#0f1b15] to-[#0b1410] p-5 shadow-xl">
+      <h3 className="mb-4 text-xs font-bold uppercase tracking-widest text-[#64d3a1]">{title}</h3>
       <div className="h-64 w-full md:h-72">
         <Line data={chartData} options={options} />
       </div>
